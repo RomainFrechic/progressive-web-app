@@ -9,7 +9,6 @@ export default class NewDeviceForm extends React.Component{
   render(){
   	return(
 		<h3>je suis NewDeviceForm</h3>
-		
   		)
   }
 } 

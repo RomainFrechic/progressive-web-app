@@ -1,9 +1,9 @@
 import React from 'react';
 
 const Input = (props)=>{
-	return(
-		<input name={props.name} onChange={props.handleInputChange} value={props.value} type={props.type}/>
-		);
+		return(
+			<input name={props.name} onChange={props.handleInputChange} value={props.value} type={props.type}/>
+			);
 }
 
 Input.propTypes ={
