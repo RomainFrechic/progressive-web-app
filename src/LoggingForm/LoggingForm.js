@@ -2,6 +2,8 @@ import React from 'react';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import axios from 'axios';
+import './LoggingForm.css';
+
 export default class LoggingForm extends React.Component{
 	constructor(props){
 		super(props);
@@ -22,37 +24,41 @@ export default class LoggingForm extends React.Component{
 		const name = target.name;
 		this.setState({[name]: value});
 	}
-  
-   handleClick(event) {
-   	event.preventDefault();
-   	const {organisation, loggin, password} = this.state;
-   	console.log(organisation, loggin, password);
-   	axios.post('http://localhost:8000/api/authenticate',{
-   		loggin:loggin,
-   		password:password,
-   		organisation:organisation
-   	})
-   	.then(function(response){
-	console.log(response);
-   	})
-   	.catch(function(error){
-   	console.log(error);
-   	});
-   }
+
+	handleClick(event) {
+		event.preventDefault();
+		const {organisation, loggin, password} = this.state;
+		console.log(organisation, loggin, password);
+		axios.post('http://localhost:8000/api/authenticate',{
+			loggin:loggin,
+			password:password,
+			organisation:organisation
+		})
+		.then(function(response){
+			console.log(response);
+		})
+		.catch(function(error){
+			console.log(error);
+		});
+	}
 
 	render(){
 		return(
 			<div className="LoggingForm">
 			<form>
-	
-			<label>Votre nom ou identifiant
-				<Input name="loggin" handleInputChange={this.handleInputChange} value={this.state.loggin} type="text"/>				
-			</label>
-			<label>Organisation
-				<Input name="organisation" handleInputChange={this.handleInputChange} value={this.state.organisation} type="text"/>				
-			</label>
+			<div>
+				<label>Votre nom ou identifiant
+					<Input name="loggin" handleInputChange={this.handleInputChange} value={this.state.loggin} type="text"/>				
+				</label>
+			</div>
+			<div>
+				<label>Organisation
+					<Input name="organisation" handleInputChange={this.handleInputChange} value={this.state.organisation} type="text"/>				
+				</label>
+			</div>
+			<div></div>
 			<label>Mot de passe
-				<Input name="password" handleInputChange={this.handleInputChange} value={this.state.password} type="password"/>				
+			<Input name="password" handleInputChange={this.handleInputChange} value={this.state.password} type="password"/>				
 			</label>
 			<Button className="buttonLoggin" handleClick={this.handleClick}>Se connecter</Button>
 			</form>
