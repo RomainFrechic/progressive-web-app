@@ -1,5 +1,13 @@
-.LoggingForm{
+.LoggingForm {
+	margin-top: 10vh;
 	display: flex;
 	flex-direction: column;
-	
+	justify-content: space-around;
+}
+.LoggingRow{
+	text-align: center;
+}
+.buttonRow{
+	margin-top: 3vh;
+	margin-bottom: 3vh;
 }

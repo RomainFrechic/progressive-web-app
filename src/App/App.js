@@ -1,24 +1,50 @@
 import React from 'react';
-import logo from '../../public/logo.png';
-import './App.css';
+import Header from '../Header/Header';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+/*Theme  is required for using material-ui library https://github.com/callemall/material-ui#usage */
+
+/*
+In this "global" component we took decided to make log validation with 
+the state boolean isLogged.Each component will on the method "will mount",
+make a verification of this state. This is probably not the best way to handle
+user authentification but without knowledge of the back-end it's the only one we know.
+Caveat is that on reload , authentifaction will be required again.
+*/
 
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state={test:'truc'};
+    this.state={
+      isLogged: false,
+      login: '',
+      userOrganisation: ''
+    }
+    this.setStateUser = this.setStateUser.bind(this);
   }
+  
+  /**
+   * Use setState of App to remember the current user
+   * @param {{userOrganisation:[string], login:[string], isLogged:[boolean]}}
+   */
+  setStateUser(userObject){
+    this.setState(userObject);
+  }
+
   render() {
+    /*a "hack" that is required to pass props the children*/
+    const {children} = this.props;
+    const clonedChildren = React.cloneElement(children,
+      {setStateUser: this.setStateUser, logStatus: this.state.isLogged});
+
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-        </div>
-        <div>
-          {this.props.children}
-        </div>
-        
-      </div>
-    );
+        <MuiThemeProvider>
+          <div>
+            <Header logStatus={this.state.isLogged}/>
+            {clonedChildren}
+          </div>
+        </MuiThemeProvider>
+     )
   }
 }
 

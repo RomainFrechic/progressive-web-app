@@ -1,67 +1,103 @@
 import React from 'react';
-import Input from '../Input/Input';
-import Button from '../Button/Button';
+import { hashHistory } from 'react-router';
+import TextField from 'material-ui/TextField';
 import axios from 'axios';
 import './LoggingForm.css';
+import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
 
 export default class LoggingForm extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
 			organisation:'',
-			loggin: '',
-			password: ''
-
+			login: '',
+			password: '',
+			waitingOnServer:false,
+			errorMessage: ''
 		};
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleInputChange(event) {
-		const target = event.target;
-		/*we test if the input is or not a checkbox for making sure we take the right value*/
-		const value = target.type === 'checkbox' ? target.checked : target.value;
-		const name = target.name;
+
+	/**
+	 * 		--doit etre fait--
+	 * le label des input tom sur le text quand on perd le focus
+	 * 
+	 * gerer les erreurs
+	 */
+	
+
+	componentWillMount(){
+		/**/
+	}
+
+	handleInputChange(event, nextValue) {
+		const value = nextValue;
+		const name = event.target.name;		
 		this.setState({[name]: value});
 	}
 
 	handleClick(event) {
+		this.setState({waitingOnServer:true});
+		const me = this;
+		/*hack to keep the global context in the axios promise*/
 		event.preventDefault();
-		const {organisation, loggin, password} = this.state;
-		console.log(organisation, loggin, password);
+		const {organisation, login, password} = this.state;
+		/*We get our user info from the state and we send them for authentification*/
 		axios.post('http://localhost:8000/api/authenticate',{
-			loggin:loggin,
+			login:login,
 			password:password,
 			organisation:organisation
 		})
 		.then(function(response){
-			console.log(response);
+			me.setState({waitingOnServer:false});
+			if(response.status === 200){
+				console.log(response);
+				me.props.setStateUser({userOrganisation:organisation, userName:login, isLogged:true});
+				hashHistory.push('/create_device');
+			}
 		})
 		.catch(function(error){
+			me.setState({waitingOnServer:false, errorMessage: "error"});
 			console.log(error);
+			/*need error handling*/
 		});
 	}
 
 	render(){
 		return(
-			<div className="LoggingForm">
-			<form>
 			<div>
-				<label>Votre nom ou identifiant
-					<Input name="loggin" handleInputChange={this.handleInputChange} value={this.state.loggin} type="text"/>				
-				</label>
-			</div>
-			<div>
-				<label>Organisation
-					<Input name="organisation" handleInputChange={this.handleInputChange} value={this.state.organisation} type="text"/>				
-				</label>
-			</div>
-			<div></div>
-			<label>Mot de passe
-			<Input name="password" handleInputChange={this.handleInputChange} value={this.state.password} type="password"/>				
-			</label>
-			<Button className="buttonLoggin" handleClick={this.handleClick}>Se connecter</Button>
-			</form>
+				<form>
+					<div className="LoggingForm">
+						<div className="LoggingRow">
+							 <TextField onChange={this.handleInputChange} name="login" type='text'
+							 value={this.state.loggin} floatingLabelText="Votre nom ou identifiant"/>
+						</div>
+						<div className="LoggingRow">
+							 <TextField onChange={this.handleInputChange} name="organisation" type='text'
+							 value={this.state.organisation} floatingLabelText="Organisation"/>
+						</div>
+						<div className="LoggingRow">
+							 <TextField onChange={this.handleInputChange} name="password" 
+							 value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
+						</div>
+						<div className="LoggingRow">
+						{this.state.errorMessage?
+							 (<p>{this.state.errorMessage}</p>)
+							 :null}
+						</div>
+						<div className="LoggingRow buttonRow">
+							  <RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
+						</div>
+						{ this.state.waitingOnServer?
+						(<div className="LoggingRow">
+							<CircularProgress />
+						</div>)
+						: null}
+				</div>
+				</form>
 			</div>
 			);
 	}

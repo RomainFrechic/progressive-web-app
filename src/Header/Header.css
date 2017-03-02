@@ -1,0 +1,12 @@
+.Header-logo {
+  height: 8vh;
+}
+
+.Header {
+  display: flex;
+}
+
+.Header img{
+	margin-left: auto;
+	margin-right: auto;
+}
