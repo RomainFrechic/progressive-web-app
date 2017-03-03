@@ -1,0 +1,19 @@
+.NewDeviceForm {
+	margin-top: 5vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}
+.NewDeviceRow{
+
+}
+form{
+	max-width: 90vw;
+	margin-right: auto;
+	margin-left: auto;
+}
+.buttonRow{
+	margin-top: 3vh;
+	margin-bottom: 3vh;
+}
