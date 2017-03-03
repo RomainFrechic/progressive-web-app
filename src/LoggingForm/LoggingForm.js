@@ -5,6 +5,7 @@ import axios from 'axios';
 import './LoggingForm.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import errorHandling from './errorHandling.js'
 
 export default class LoggingForm extends React.Component{
 	constructor(props){
@@ -20,15 +21,12 @@ export default class LoggingForm extends React.Component{
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-
 	/**
 	 * 		--doit etre fait--
-	 * le label des input tom sur le text quand on perd le focus
 	 * 
 	 * gerer les erreurs
 	 */
 	
-
 	componentWillMount(){
 		/**/
 	}
@@ -61,8 +59,10 @@ export default class LoggingForm extends React.Component{
 		})
 		.catch(function(error){
 			me.setState({waitingOnServer:false, errorMessage: "error"});
-			console.log(error);
-			/*need error handling*/
+			/*console.log(error.response.status);*/
+			console.log(Error,error.message);
+			/*this is our basic error handling. You may want to replace this part*/
+			this.setState({errorMessage: errorHandling(error)});
 		});
 	}
 
@@ -70,35 +70,35 @@ export default class LoggingForm extends React.Component{
 		return(
 			<div>
 				<form>
-					<div className="LoggingForm">
-						<div className="LoggingRow">
-							 <TextField onChange={this.handleInputChange} name="login" type='text'
-							 value={this.state.loggin} floatingLabelText="Votre nom ou identifiant"/>
-						</div>
-						<div className="LoggingRow">
-							 <TextField onChange={this.handleInputChange} name="organisation" type='text'
-							 value={this.state.organisation} floatingLabelText="Organisation"/>
-						</div>
-						<div className="LoggingRow">
-							 <TextField onChange={this.handleInputChange} name="password" 
-							 value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
-						</div>
-						<div className="LoggingRow">
-						{this.state.errorMessage?
-							 (<p>{this.state.errorMessage}</p>)
-							 :null}
-						</div>
-						<div className="LoggingRow buttonRow">
-							  <RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
-						</div>
-						{ this.state.waitingOnServer?
-						(<div className="LoggingRow">
-							<CircularProgress />
-						</div>)
-						: null}
-				</div>
-				</form>
-			</div>
+	<div className="LoggingForm">
+		<div className="LoggingRow">
+			 <TextField onChange={this.handleInputChange} name="login" type='text'
+			 value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
+		</div>
+		<div className="LoggingRow">
+			 <TextField onChange={this.handleInputChange} name="organisation" type='text'
+			 value={this.state.organisation} floatingLabelText="Organisation"/>
+		</div>
+		<div className="LoggingRow">
+			 <TextField onChange={this.handleInputChange} name="password" 
+			 value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
+		</div>
+		<div className="LoggingRow">
+		{this.state.errorMessage?
+			 (<p>{this.state.errorMessage}</p>)
+			 :null}
+		</div>
+		<div className="LoggingRow buttonRow">
+			  <RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
+		</div>
+		{ this.state.waitingOnServer?
+		(<div className="LoggingRow">
+			<CircularProgress />
+		</div>)
+		: null}
+	</div>
+			</form>
+		</div>
 			);
 	}
 } 
