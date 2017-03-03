@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from '../Header/Header';
-
+import {green500} from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 /*Theme  is required for using material-ui library https://github.com/callemall/material-ui#usage */
 
 /*
@@ -11,6 +12,13 @@ make a verification of this state. This is probably not the best way to handle
 user authentification but without knowledge of the back-end it's the only one we know.
 Caveat is that on reload , authentifaction will be required again.
 */
+
+const intesensTheme = getMuiTheme({
+  palette: {
+    primary1Color:green500,
+  }
+});
+
 
 class App extends React.Component {
   constructor(props){
@@ -27,7 +35,7 @@ class App extends React.Component {
    * Use setState of App to remember the current user
    * @param {{userOrganisation:[string], login:[string], isLogged:[boolean]}}
    */
-  setStateUser(userObject){
+   setStateUser(userObject){
     this.setState(userObject);
   }
 
@@ -38,13 +46,13 @@ class App extends React.Component {
       {setStateUser: this.setStateUser, logStatus: this.state.isLogged});
 
     return (
-        <MuiThemeProvider>
-          <div>
-            <Header logStatus={this.state.isLogged}/>
-            {clonedChildren}
-          </div>
-        </MuiThemeProvider>
-     )
+      <MuiThemeProvider muiTheme={intesensTheme}>
+      <div>
+      <Header logStatus={this.state.isLogged}/>
+      {clonedChildren}
+      </div>
+      </MuiThemeProvider>
+      )
   }
 }
 
