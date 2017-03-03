@@ -52,17 +52,13 @@ export default class LoggingForm extends React.Component{
 		.then(function(response){
 			me.setState({waitingOnServer:false});
 			if(response.status === 200){
-				console.log(response);
 				me.props.setStateUser({userOrganisation:organisation, userName:login, isLogged:true});
 				hashHistory.push('/create_device');
 			}
 		})
 		.catch(function(error){
-			me.setState({waitingOnServer:false, errorMessage: "error"});
-			/*console.log(error.response.status);*/
-			console.log(Error,error.message);
 			/*this is our basic error handling. You may want to replace this part*/
-			this.setState({errorMessage: errorHandling(error)});
+			me.setState({waitingOnServer:false, errorMessage: errorHandling(error)});
 		});
 	}
 
