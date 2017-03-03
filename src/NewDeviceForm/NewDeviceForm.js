@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { hashHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import './NewDeviceForm.css';
@@ -15,7 +16,6 @@ export default class NewDeviceForm extends React.Component{
     };
     this.handInputChange = this.handInputChange.bind(this);
 	this.handClick = this.handClick.bind(this);
-	this.date = this.date.bind(this);
   }
 
   componentWillMount(){
@@ -35,25 +35,27 @@ export default class NewDeviceForm extends React.Component{
 		
 	}
 
-	date(){
-		var hoursDate = new Date().toLocaleTimeString(); // hh:mm:ss
-		// document.getElementById("timer").innerHTML = hoursDate;
-		// setTimeout(date, 1000); 
-	}
+	
 
 
   render(){
+  	//Library to format Date and hour in locale time
+  	moment.locale('fr');
+  	const currentDate = moment().format('LLL','LT');
+  
   	return(
 		<form>
 			<div className="NewDeviceForm">
 					<div className="NewDeviceHeader">
-						<h2>Déclarer une nouvelle installation.</h2>
+						<h2>Déclarer une nouvelle installation</h2>
 					</div>
 					<div className="NewDeviceRow">
 						 <h3>Installateur : {this.props.userStatus.userName}</h3>
 					</div>
 					<div className="NewDeviceRow">
-						 <h3>Date : {this.date}</h3>
+					 
+						 <h3>Date : {currentDate}</h3> 
+
 					</div>
 					<div className="NewDeviceRow">
 						 <TextField onChange={this.handInputChange} name="deviceId" type='text'

@@ -33,7 +33,6 @@ class App extends React.Component {
   
   /**
    * Use setState of App to remember the current user
-   * this setter is passed to other the logging form
    * @param {{userOrganisation:[string], login:[string], isLogged:[boolean]}}
    */
    setStateUser(userObject){
@@ -44,7 +43,7 @@ class App extends React.Component {
     /*a "hack" that is required to pass props the children*/
     const {children} = this.props;
     const clonedChildren = React.cloneElement(children,
-      {setStateUser: this.setStateUser, userStatus: this.state});
+      {setStateUser: this.setStateUser, userStatus:this.state});
 
     return (
       <MuiThemeProvider muiTheme={intesensTheme}>
