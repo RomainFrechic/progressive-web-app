@@ -47,7 +47,7 @@ export default class NewDeviceForm extends React.Component{
 		<form>
 			<div className="NewDeviceForm">
 					<div className="NewDeviceHeader">
-						<h2>Déclarer une nouvelle installation</h2>
+						<h3>Déclarer une nouvelle installation</h3>
 					</div>
 					<div className="NewDeviceRow">
 						 <h3>Installateur : {this.props.userStatus.userName}</h3>
