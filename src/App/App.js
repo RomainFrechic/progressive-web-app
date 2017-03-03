@@ -24,9 +24,18 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      isLogged: false,
+      isLogged: true,
       login: '',
-      userOrganisation: ''
+      userOrganisation: '',
+      currentDevice: {
+        postalAdress: '',
+        latitude: '',
+        longitude: '',
+        googlePlaceId: '',
+        id:'',
+        timeOfInstall: '',
+        comment:''
+      }
     }
     this.setStateUser = this.setStateUser.bind(this);
   }
@@ -34,7 +43,7 @@ class App extends React.Component {
   /**
    * Use setState of App to remember the current user
    * this setter is passed to other the logging form
-   * @param {{userOrganisation:[string], login:[string], isLogged:[boolean]}}
+   * @param {ex:{userOrganisation:[string], login:[string], isLogged:[boolean]}}
    */
    setStateUser(userObject){
     this.setState(userObject);
@@ -48,10 +57,10 @@ class App extends React.Component {
 
     return (
       <MuiThemeProvider muiTheme={intesensTheme}>
-      <div>
-      <Header logStatus={this.state.isLogged}/>
-      {clonedChildren}
-      </div>
+        <div>
+          <Header logStatus={this.state.isLogged}/>
+          {clonedChildren}
+        </div>
       </MuiThemeProvider>
       )
   }
