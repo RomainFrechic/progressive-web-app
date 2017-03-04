@@ -7,11 +7,13 @@ import MyLocationIcon from 'material-ui/svg-icons/maps/my-location';
 import IconButton from 'material-ui/IconButton';
 import AdressAutocomplete from '../AdressAutocomplete/AdressAutocomplete';
 import RaisedButton from 'material-ui/RaisedButton'
+import CircularProgress from 'material-ui/CircularProgress';
 
 export default class NewDeviceForm extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
+			waitingOnGeolocation: false,
 			usedGeolocalisation: false,
 		    latitude: '',
 		    longitude: '',
@@ -63,9 +65,11 @@ export default class NewDeviceForm extends React.Component{
 					});
 					/*we need to emulate a user input to set the value on location input*/
 					const postalAdress = results[0].formatted_address;
+  					this.setState({waitingOnGeolocation: false});
 					this.handleInputChange(null, postalAdress);
       			}else {
 	      			/*geocode error handling goes here*/
+  					this.setState({waitingOnGeolocation: false});
 	      			window.alert('Geocoder failed due to: ' + status);
     			}
 			});
@@ -79,10 +83,12 @@ export default class NewDeviceForm extends React.Component{
 			2: position unavailable (error response from location provider)
 			3: timed out
 			*/
+  			this.setState({waitingOnGeolocation: false});
 			window.alert('Geolocation failed, error code: ' + error.code);
 		};
 
   		navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError, geoLocationOptions);
+  		this.setState({waitingOnGeolocation: true});
 	}
 
 	handleValidation(event){
@@ -119,10 +125,12 @@ export default class NewDeviceForm extends React.Component{
 			<div className="NewDeviceRow localisationRow">
 				<AdressAutocomplete name="postalAdress" floatingLabelText="Localisation" fullWidth={true}
 				onChange={this.handleInputChange} value={this.state.postalAdress}/>
-				<IconButton onClick={this.handleLocation} tooltipPosition="top-center" 
-				tooltip="Utiliser GPS localisation">
-					<MyLocationIcon/>
-				</IconButton>
+				{this.state.waitingOnGeolocation? <CircularProgress/> :
+					<IconButton onClick={this.handleLocation} tooltipPosition="top-center" 
+					tooltip="Utiliser GPS localisation">
+						<MyLocationIcon/>
+					</IconButton>
+				}
 			</div>
 			<div className="NewDeviceRow">
 				 <TextField onChange={this.handleInputChange} name="comment" type='text'

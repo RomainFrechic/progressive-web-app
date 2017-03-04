@@ -24,7 +24,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      isLogged: true,
+      isLogged: false,
       userLogin: '',
       userOrganisation: '',
       currentDevice: {
@@ -41,16 +41,29 @@ class App extends React.Component {
   }
   
   /**
-   * Use setState of App to remember the current user
-   * this setter is passed to children components
+   * a setter function bound to the context of App.
+   * we pass this function to the  children to allow them to setState of App.
    * @param {ex:{userOrganisation:[string], userLogin:[string], isLogged:[boolean]}}
    */
    setStateApp(userObject){
     this.setState(userObject);
   }
+  
+  componentWillMount(){
+    /*simple cookie value finder to read our fake auth token.
+      to replace by proper authentification system */
+    function getCookieValue(a) {
+      var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+      return b ? b.pop() : '';
+    }
+    /*if the cookie exist and has the fake value*/
+    if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
+      this.setState({isLogged: true});
+    }
+  }
 
   render() {
-    /*a "hack" that is required to pass props to the children*/
+    /*a "hack" that is required to pass props to this.props.children*/
     const {children} = this.props;
     const clonedChildren = React.cloneElement(children,
       {setStateApp: this.setStateApp, AppState:this.state});
