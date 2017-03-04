@@ -1,15 +1,14 @@
 .Header-logo {
-  height: 8vh;
+	max-height: 7vh;
+	margin-top: 1vh;
+	max-width: auto;
 }
 
 .Header {
-  display: flex;
+	display: flex;
 }
 
 .Header img{
 	margin-left: auto;
 	margin-right: auto;
-}
-@media (min-width:801px)  {
-	
 }

@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
   <meta name="theme-color" content="#89CC49">
-  <link rel="icon" sizes="192x192" href="logo-192px.png">
-  <link rel="apple-touch-icon" href="logo-192px.png">
+  <link rel="icon" sizes="192x192" href="logo_192x192.png">
+  <link rel="apple-touch-icon" href="logo_192x192.png">
    <!--  Notice the use of %PUBLIC_URL% in the tag above.
      It will be replaced with the URL of the `public` folder during the build.
      Only files inside the `public` folder can be referenced from the HTML.
@@ -37,7 +38,10 @@
      }
    </script>
 
-   <!-- would be better to add async and defer for production -->
+
+   <!-- Remember to change my key by yours.
+
+   Would be better to add async and defer option to the script once in production -->
    <script type='text/javascript' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0LvL8cr0cj_Rq2V7WmtnE0Mq9uxTnEi8&libraries=places"  ></script>
 
  </body>
