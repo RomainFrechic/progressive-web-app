@@ -25,35 +25,35 @@ class App extends React.Component {
     super(props);
     this.state={
       isLogged: true,
-      login: '',
+      userLogin: '',
       userOrganisation: '',
       currentDevice: {
         postalAdress: '',
         latitude: '',
         longitude: '',
-        googlePlaceId: '',
         id:'',
         timeOfInstall: '',
-        comment:''
+        comment:'',
+        usedGeolocalisation:false
       }
     }
-    this.setStateUser = this.setStateUser.bind(this);
+    this.setStateApp = this.setStateApp.bind(this);
   }
   
   /**
    * Use setState of App to remember the current user
-   * this setter is passed to other the logging form
-   * @param {ex:{userOrganisation:[string], login:[string], isLogged:[boolean]}}
+   * this setter is passed to children components
+   * @param {ex:{userOrganisation:[string], userLogin:[string], isLogged:[boolean]}}
    */
-   setStateUser(userObject){
+   setStateApp(userObject){
     this.setState(userObject);
   }
 
   render() {
-    /*a "hack" that is required to pass props the children*/
+    /*a "hack" that is required to pass props to the children*/
     const {children} = this.props;
     const clonedChildren = React.cloneElement(children,
-      {setStateUser: this.setStateUser, userStatus:this.state});
+      {setStateApp: this.setStateApp, AppState:this.state});
 
     return (
       <MuiThemeProvider muiTheme={intesensTheme}>

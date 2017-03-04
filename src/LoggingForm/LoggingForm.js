@@ -21,12 +21,6 @@ export default class LoggingForm extends React.Component{
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	/**
-	 * 		--doit etre fait--
-	 * 
-	 * gerer les erreurs
-	 */
-	
 	componentWillMount(){
 		/**/
 	}
@@ -52,8 +46,8 @@ export default class LoggingForm extends React.Component{
 		.then(function(response){
 			me.setState({waitingOnServer:false});
 			if(response.status === 200){
-				me.props.setStateUser({userOrganisation:organisation, userName:login, isLogged:true});
-				hashHistory.push('/create_device');
+				me.props.setStateApp({userOrganisation:organisation, userLogin:login, isLogged:true});
+				hashHistory.push('/install_device');
 			}
 		})
 		.catch(function(error){
