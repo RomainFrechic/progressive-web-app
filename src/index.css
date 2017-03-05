@@ -4,8 +4,9 @@ body {
   font-family: sans-serif;
 }
 @media (min-width:801px) {
-.App{
-	max-width: 600px;
-}
-	
+	.App{
+		margin-right: auto;
+		margin-left: auto;
+		max-width: 600px;
+	}
 }

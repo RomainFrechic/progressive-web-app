@@ -6,15 +6,18 @@ export default class AddressAutocomplete extends Component {
     value: PropTypes.string,
     floatingLabelText: PropTypes.string,
     hintText: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    name: PropTypes.string
   }
 
   componentWillMount () {
-    this.setState({ value: this.props.value || '' })
+    this.setState({value: this.props.value || '' })
   }
 
   componentDidMount () {
     const input = document.getElementById('addressAutocompleteField')
+    /*here we pass options to the API
+    https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform?hl=fr */
     const options = {
       componentRestrictions: {country: 'fr'},
       types: ['address']
@@ -22,43 +25,30 @@ export default class AddressAutocomplete extends Component {
     const geoAutocomplete = new window.google.maps.places.Autocomplete((input), options)
     geoAutocomplete.addListener('place_changed', () => {
       const selectedPlace = geoAutocomplete.getPlace()
-      const componentForm = {
-        street_number: 'short_name',
-        route: 'long_name',
-        locality: 'long_name',
-        administrative_area_level_1: 'short_name',
-        country: 'long_name',
-        postal_code: 'short_name'
-      }
-      // Get each component of the address from the place details
-      // and fill the corresponding field on the form.
-      let selectedSuggest = {}
-      for (let addressComponent of selectedPlace.address_components) {
-        const addressType = addressComponent.types[0]
-        if (componentForm[addressType]) {
-          selectedSuggest[addressType] = addressComponent[componentForm[addressType]]
-        }
-      }
-      console.log(selectedPlace);
-      console.log(selectedPlace.geometry.location.lat())
-      console.log(selectedSuggest);
-      input.value = selectedPlace.formatted_address;
-      //this.props.onChange(selectedPlace.formatted_address)
+      /*
+        We chose to use formated_adress to save in the state, but the geoAutocomplete.getPlace()
+        returned object contains many other usefull data.
+       */
+      const formatted_address = selectedPlace.formatted_address; 
+      input.value = formatted_address;
+      /*we call directly onChange, without a real event, so we pass null as event param.
+        (see the NewDeviceForm.js handleInput function)*/
+      this.props.onChange(null,formatted_address);
     })
   }
-
-  _handleChange = (event, value) => this.setState({ value })
 
   render () {
     return (
       <TextField
+        name={this.props.name}
         id='addressAutocompleteField'
+        floatingLabelFixed={this.props.floatingLabelFixed}
         floatingLabelText={this.props.floatingLabelText}
         hintText={this.props.hintText}
-        value={this.state.value}
-        onChange={this._handleChange}
-        placeholder=''
+        value={this.props.value}
+        onChange={this.props.onChange}
         fullWidth={this.props.fullWidth}
+        placeholder=''
       />
     )
   }

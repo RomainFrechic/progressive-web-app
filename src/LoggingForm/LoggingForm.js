@@ -21,16 +21,6 @@ export default class LoggingForm extends React.Component{
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	/**
-	 * 		--doit etre fait--
-	 * 
-	 * gerer les erreurs
-	 */
-	
-	componentWillMount(){
-		/**/
-	}
-
 	handleInputChange(event, nextValue) {
 		const value = nextValue;
 		const name = event.target.name;		
@@ -43,20 +33,28 @@ export default class LoggingForm extends React.Component{
 		/*hack to keep the global context in the axios promise*/
 		event.preventDefault();
 		const {organisation, login, password} = this.state;
-		/*We get our user info from the state and we send them for authentification*/
-		axios.post('http://localhost:8000/api/authenticate',{
-			login:login,
+		/* 
+		We get our user info from the state and we send them for authentification.
+		*/
+		axios.post('https://reqres.in/api/login',{
+			username:login,
 			password:password,
 			organisation:organisation
 		})
 		.then(function(response){
 			me.setState({waitingOnServer:false});
+			console.log(response);
 			if(response.status === 200){
-				me.props.setStateUser({userOrganisation:organisation, userName:login, isLogged:true});
-				hashHistory.push('/create_device');
+				/*here goes authentification*/
+				const authToken = response.data.token;
+				document.cookie = `authToken=${authToken};path="/";`
+				me.props.setStateApp({userOrganisation:organisation,userLogin:login});
+				hashHistory.push('/install_device');
 			}
 		})
 		.catch(function(error){
+			console.log(error);
+
 			/*this is our basic error handling. You may want to replace this part*/
 			me.setState({waitingOnServer:false, errorMessage: errorHandling(error)});
 		});
@@ -65,36 +63,36 @@ export default class LoggingForm extends React.Component{
 	render(){
 		return(
 			<div>
-				<form>
-	<div className="LoggingForm">
-		<div className="LoggingRow">
-			 <TextField onChange={this.handleInputChange} name="login" type='text'
-			 value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
-		</div>
-		<div className="LoggingRow">
-			 <TextField onChange={this.handleInputChange} name="organisation" type='text'
-			 value={this.state.organisation} floatingLabelText="Organisation"/>
-		</div>
-		<div className="LoggingRow">
-			 <TextField onChange={this.handleInputChange} name="password" 
-			 value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
-		</div>
-		<div className="LoggingRow">
-		{this.state.errorMessage?
-			 (<p>{this.state.errorMessage}</p>)
-			 :null}
-		</div>
-		<div className="LoggingRow buttonRow">
-			  <RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
-		</div>
-		{ this.state.waitingOnServer?
-		(<div className="LoggingRow">
-			<CircularProgress />
-		</div>)
-		: null}
-	</div>
-			</form>
-		</div>
-			);
+			<form>
+			<div className="LoggingForm">
+			<div className="LoggingRow">
+			<TextField onChange={this.handleInputChange} name="login" type='text'
+			value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
+			</div>
+			<div className="LoggingRow">
+			<TextField onChange={this.handleInputChange} name="organisation" type='text'
+			value={this.state.organisation} floatingLabelText="Organisation"/>
+			</div>
+			<div className="LoggingRow">
+			<TextField onChange={this.handleInputChange} name="password" 
+			value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
+			</div>
+			<div className="LoggingRow">
+			{this.state.errorMessage?
+				(<p>{this.state.errorMessage}</p>)
+				:null}
+				</div>
+				<div className="LoggingRow buttonRow">
+				<RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
+				</div>
+				{ this.state.waitingOnServer?
+					(<div className="LoggingRow">
+						<CircularProgress />
+						</div>)
+					: null}
+					</div>
+					</form>
+					</div>
+					);
 	}
 } 
