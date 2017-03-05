@@ -6,7 +6,7 @@ import VerticalMenu from '../VerticalMenu/VerticalMenu';
 const Header = (props)=>{
 	return(
             <div className="Header">
-            	{props.logStatus? <VerticalMenu/>: null}
+            	{props.logStatus? <VerticalMenu newInstall={props.newInstall} logout={props.logout}/>: null}
             	<img src={banner} className="Header-logo" alt="logo"/>
             </div>
            );
