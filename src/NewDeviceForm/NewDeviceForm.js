@@ -105,9 +105,7 @@ export default class NewDeviceForm extends React.Component{
 	}
 
   render(){
-  	//Library to format Date and hour in locale time
-  	moment.locale('fr');
-  	const currentDate = moment().format('LLL','LT');
+
 	return(
 	<form>
 		{this.props.children}

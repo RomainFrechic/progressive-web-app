@@ -16,7 +16,7 @@ const VerticalMenu = ()=> (
 				<MenuItem primaryText="Send feedback" />
 				<MenuItem primaryText="Settings" />
 				<MenuItem primaryText="Help" />
-				<MenuItem primaryText="Sign out" />
+				<MenuItem primaryText="Déconnexion" />
 		    </IconMenu>
 	    </div>
     );
