@@ -13,6 +13,7 @@ const VerticalMenu = (props)=> (
 				anchorOrigin={{horizontal: 'left', vertical: 'top'}}
 				targetOrigin={{horizontal: 'left', vertical: 'top'}}
 		    >
+
 				<MenuItem onTouchTap={props.newInstall} primaryText="Faire une nouvelle installation" />
 				<MenuItem primaryText="Se rendre sur IDIAG web" />
 				<MenuItem primaryText="Options" />

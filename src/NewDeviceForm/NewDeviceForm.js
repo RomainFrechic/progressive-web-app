@@ -36,10 +36,26 @@ export default class NewDeviceForm extends React.Component{
 	componentWillMount(){
 		/*before rendering we check the logStatus and we redirect to homepage if false*/
 		if(this.props.AppState.isLogged === false){hashHistory.push('/');}
+		//we re-populate the form
+		const currentDevice = this.props.AppState.currentDevice;
+        this.setState({
+        	postalAdress:currentDevice.postalAdress,
+        	latitude:currentDevice.latitude,
+        	longitude:currentDevice.longitude,
+        	id:currentDevice.id,
+        	timeOfInstall:currentDevice.timeOfInstall,
+        	comment:currentDevice.comment,
+        	usedGeolocalisation:currentDevice.usedGeolocalisation
+         });
+         
+        
 		//Library to format Date and hour in locale time
+		if(!this.state.timeOfInstall){
 		moment.locale('fr');
 		this.setState({timeOfInstall: moment().format('LLL','LT')});
 	}
+      };
+	
 	
 	/*on blur, we test id field with this regex.
 	(like in wireframes we ask for a hexa number of 4 length)*/
@@ -152,6 +168,7 @@ export default class NewDeviceForm extends React.Component{
 		const idErrorText = this.state.idErrorText;
 		const localError = this.state.localError;
 		const localErrorText = this.state.localErrorText;
+		
 	return(
 	<form>
 		{this.props.children}

@@ -1,0 +1,43 @@
+.NewConfirmation{
+	margin-top: 3vh;
+	display: flex;
+	flex-direction: column;
+	
+}
+
+.ConfirmationHeader{
+	text-align: center;
+}
+
+
+.ConfirmationRow{
+	margin-bottom: 3vh;
+	font-size: 1.1rem;
+}
+
+.ConfirmationPage {
+	margin-top: 5vh;
+	display: flex;
+	flex-direction: column;
+}
+.LongLatRow{
+   font-size: 0.8rem;
+}
+
+form{
+	overflow: hidden;
+	max-width: 90vw;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.messageWarning{
+	display: flex;
+
+}
+.buttonRow{
+	margin-top: 3vh;
+	margin-bottom: 3vh;
+
+}
+

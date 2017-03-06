@@ -1,11 +1,9 @@
 .NewDeviceForm {
-	margin-top: 5vh;
+	margin-top: 3vh;
 	display: flex;
 	flex-direction: column;
 }
-.NewDeviceRow{
 
-}
 .installateurRow{
 	margin-bottom: 3vh;
 }
@@ -29,6 +27,13 @@ form{
 .buttonRow{
 	margin-top: 3vh;
 	margin-bottom: 3vh;
+
+}
+
+h3{
+	
+	text-align: center;
 	margin-right: auto;
 	margin-left: auto;
 }
+
