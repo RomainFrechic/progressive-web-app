@@ -41,8 +41,21 @@ class App extends React.Component {
     }
     this.setStateApp = this.setStateApp.bind(this);
     this.logout = this.logout.bind(this);
+    this.newInstall = this.newInstall.bind(this);
   }
   
+  componentWillMount(){
+    /*simple cookie value finder to read our fake auth token.
+      to replace by proper authentification system */
+    function getCookieValue(a) {
+      var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+      return b ? b.pop() : '';
+    }
+    /*if the cookie exist and has the fake value*/
+    if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
+      this.setState({isLogged: true});
+    }
+  }
   /**
    * a setter function bound to the context of App.
    * we pass this function to the  children to allow them to setState of App.
@@ -60,24 +73,11 @@ class App extends React.Component {
     document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     hashHistory.push('/');
   }
-
   newInstall(){
-    this.setState({currentDevice:{}})
+    this.setState({currentDevice:{}});
     hashHistory.push('/install_device');
   }
   
-  componentWillMount(){
-    /*simple cookie value finder to read our fake auth token.
-      to replace by proper authentification system */
-    function getCookieValue(a) {
-      var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
-      return b ? b.pop() : '';
-    }
-    /*if the cookie exist and has the fake value*/
-    if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
-      this.setState({isLogged: true});
-    }
-  }
 
   render() {
     /*a "hack" that is required to pass props to this.props.children*/

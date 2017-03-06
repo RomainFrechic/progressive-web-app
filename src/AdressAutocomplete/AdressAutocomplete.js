@@ -48,7 +48,9 @@ export default class AddressAutocomplete extends Component {
         value={this.props.value}
         onChange={this.props.onChange}
         fullWidth={this.props.fullWidth}
+        errorText={this.props.errorText}
         placeholder=''
+        required
       />
     )
   }
