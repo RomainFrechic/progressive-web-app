@@ -15,6 +15,11 @@ export default class  ConfirmationPage extends React.Component{
 		this.handleValidation = this.handleValidation.bind(this);
 	}
 
+	componentWillMount(){
+		/*before rendering we check the logStatus and we redirect to homepage if false*/
+		if(this.props.AppState.isLogged === false){hashHistory.push('/');}
+	}
+
 	handleValidation(event){
 		event.preventDefault();
 		hashHistory.push('/install_device/success');

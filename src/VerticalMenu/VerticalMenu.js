@@ -5,18 +5,20 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
-const VerticalMenu = ()=> (
+const VerticalMenu = (props)=> (
 		<div>
 		    <IconMenu
-		      iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-		      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-		      targetOrigin={{horizontal: 'left', vertical: 'top'}}
+		    	className="InconMenu"
+				iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+				anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+				targetOrigin={{horizontal: 'left', vertical: 'top'}}
 		    >
-				<MenuItem primaryText="Refresh" />
-				<MenuItem primaryText="Send feedback" />
-				<MenuItem primaryText="Settings" />
-				<MenuItem primaryText="Help" />
-				<MenuItem primaryText="Déconnexion" />
+
+				<MenuItem onTouchTap={props.newInstall} primaryText="Faire une nouvelle installation" />
+				<MenuItem primaryText="Se rendre sur IDIAG web" />
+				<MenuItem primaryText="Options" />
+				<MenuItem primaryText="Aide" />
+				<MenuItem onTouchTap={props.logout} primaryText="Se déconnecter" />
 		    </IconMenu>
 	    </div>
     );

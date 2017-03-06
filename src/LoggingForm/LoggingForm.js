@@ -43,12 +43,11 @@ export default class LoggingForm extends React.Component{
 		})
 		.then(function(response){
 			me.setState({waitingOnServer:false});
-			console.log(response);
 			if(response.status === 200){
 				/*here goes authentification*/
 				const authToken = response.data.token;
 				document.cookie = `authToken=${authToken};path="/";`
-				me.props.setStateApp({userOrganisation:organisation,userLogin:login});
+				me.props.setStateApp({userOrganisation:organisation,userLogin:login,isLogged:true});
 				hashHistory.push('/install_device');
 			}
 		})

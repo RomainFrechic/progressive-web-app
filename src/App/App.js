@@ -2,6 +2,8 @@ import React from 'react';
 import Header from '../Header/Header';
 import {green500} from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { hashHistory } from 'react-router';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 /*Theme  is required for using material-ui library https://github.com/callemall/material-ui#usage */
 
@@ -38,6 +40,7 @@ class App extends React.Component {
       }
     }
     this.setStateApp = this.setStateApp.bind(this);
+    this.logout = this.logout.bind(this);
   }
   
   /**
@@ -47,6 +50,21 @@ class App extends React.Component {
    */
    setStateApp(userObject){
     this.setState(userObject);
+  }
+  
+  /**
+   * callback function passed to verticalMenu
+   */
+  logout(){
+    this.setState({isLogged: false, userLogin: '', userOrganisation: '', currentDevice:{}});
+    document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    hashHistory.push('/');
+  }
+
+  newInstall(){
+    const changeRoute = ()=> hashHistory.push('/install_device');
+    this.setState({currentDevice:{}}, changeRoute);
+    
   }
   
   componentWillMount(){
@@ -71,7 +89,7 @@ class App extends React.Component {
     return (
       <MuiThemeProvider muiTheme={intesensTheme}>
         <div className="App">
-          <Header logStatus={this.state.isLogged}/>
+          <Header newInstall={this.newInstall} logout={this.logout} logStatus={this.state.isLogged}/>
           {clonedChildren}
         </div>
       </MuiThemeProvider>

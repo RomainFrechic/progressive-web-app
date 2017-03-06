@@ -14,9 +14,26 @@ export default class SuccessPage extends React.Component{
 		this.handleValidation = this.handleValidation.bind(this);
 	}
 
+		componentWillMount(){
+		/*before rendering we check the logStatus and we redirect to homepage if false*/
+		if(this.props.AppState.isLogged === false){hashHistory.push('/');}
+	}
+
 		handleValidation(event){
 			event.preventDefault();
-			hashHistory.push('/install_device');
+			const currentDevice = this.props.AppState.currentDevice;
+			const changeRoute = hashHistory.push('/install_device');
+
+			this.props.setStateApp({currentDevice:{
+			usedGeolocalisation:currentDevice.usedGeolocalisation,
+		    latitude:currentDevice.latitude,
+        	longitude:currentDevice.longitude,
+		    postalAdress:currentDevice.postalAdress,
+		    id:'',
+		    timeOfInstall: '',
+		    comment: ''
+			}}, changeRoute);
+
 		}
 
 		render(){
