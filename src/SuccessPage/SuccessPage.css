@@ -1,12 +1,12 @@
 .SuccessPage {
-	margin-top: 3vh;
+	margin-top: 10vh;
 	display: flex;
 	flex-direction: column;
 }
 
 .SuccessHeader{
 	text-align: center;
-	margin-bottom: 2vh;
+	margin-bottom: 10vh;
 }
 
 

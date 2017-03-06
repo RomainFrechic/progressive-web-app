@@ -21,11 +21,11 @@ export default class SuccessPage extends React.Component{
 
 		render(){
 			return(
-				<div>
+				<div className="SuccessPage">
 				<form>
 				<div className="SuccessHeader">
-				L'installation du device "{this.props.AppState.currentDevice.id}" 
-				s'est bien déroulée</div>
+				<span>L'installation du device <b>"{this.props.AppState.currentDevice.id}" </b> 
+				s'est bien déroulée</span></div>
 
 				<div className="SuccessPage buttonRow">
 				<RaisedButton onClick={this.handleValidation} 
