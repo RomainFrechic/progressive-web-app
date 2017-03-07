@@ -205,8 +205,8 @@ export default class NewDeviceForm extends React.Component{
 				 <span><b>Date :</b> {this.state.timeOfInstall}</span> 
 			</div>
 			<div className="NewDeviceRow">
-				 <TextField name="id" type='text' value={this.state.id} onBlur={this.testIdField} fullWidth 
-				 floatingLabelText="Device id" required onChange={this.validateId}
+				 <TextField name="id" type='text' value={this.state.id} onBlur={this.testIdField} fullWidth
+				 floatingLabelText="Adresse IDIAG" required onChange={this.validateId}
 				 errorText={idError? idErrorText:null}/>
 			</div>
 			<div className="NewDeviceRow localisationRow">

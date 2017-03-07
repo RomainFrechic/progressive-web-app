@@ -42,17 +42,28 @@ export default class  ConfirmationPage extends React.Component{
 			<h4>Merci de vérifier les champs renseignés</h4></div>
 
 			<div className="ConfirmationRow">
-			<span><b>Installateur :</b> {this.props.AppState.userLogin}.</span></div>
+			<span><b>Installateur :</b> {this.props.AppState.userLogin} </span></div>
 
 			<div className="ConfirmationRow">
-			<span><b>Date :</b> {this.props.AppState.currentDevice.timeOfInstall}.</span></div>
+			<span><b>Date :</b> {this.props.AppState.currentDevice.timeOfInstall} </span></div>
+
 
 			<div className="ConfirmationRow">
-			<span><b>Device id :</b> {this.props.AppState.currentDevice.id}.</span></div>
+			<span><b>Adresse IDIAG :</b></span>
+				 <TextField disabled={true} name="id" type='text' value={this.props.AppState.currentDevice.id} onBlur={this.testIdField} fullWidth 
+				 floatingLabelText=""
+				 />
+			</div>
+
 
 			<div className="ConfirmationRow">
-			<span><b>Localisation :</b> {this.props.AppState.currentDevice.postalAdress}.</span></div>
-
+			<span><b>Localisation :</b></span>
+				 <TextField disabled={true} name="id" type='text' value={this.props.AppState.currentDevice.postalAdress} onBlur={this.testIdField} fullWidth 
+				 floatingLabelText=""
+				 />
+			</div>
+			<div className="ConfirmationRow">
+			<span><b>Commentaire :</b></span>
 			<TextField
 			className="ConfirmationTextField"
 			disabled={true}
@@ -60,8 +71,8 @@ export default class  ConfirmationPage extends React.Component{
 			defaultValue={this.props.AppState.currentDevice.comment}
 			multiLine rows={2} rowsMax={2} 
 			style={{textAlign: 'left'}} fullWidth
-			floatingLabelText="Commentaire"
-			/>
+			floatingLabelText=""
+			/></div>
              <div className="messageWarning">
 			<p> <WarningIcon className="iconWarning" style={{color: 'orange'}} />
 			Les renseignements fournis sont modifiables 

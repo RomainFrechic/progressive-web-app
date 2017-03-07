@@ -48,7 +48,11 @@ export default class LoggingForm extends React.Component{
 				const authToken = response.data.token;
 				document.cookie = `authToken=${authToken};path="/";`
 				me.props.setStateApp({userOrganisation:organisation,userLogin:login,isLogged:true});
+				document.cookie = `login=${login};path="/";`
+				document.cookie = `organisation=${organisation};path="/";`
 				hashHistory.push('/install_device');
+				console.log(document.cookie);
+				
 			}
 		})
 		.catch(function(error){
@@ -65,33 +69,32 @@ export default class LoggingForm extends React.Component{
 			<form>
 			<div className="LoggingForm">
 			<div className="LoggingRow">
-			<TextField onChange={this.handleInputChange} name="login" type='text'
-			value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
-			</div>
-			<div className="LoggingRow">
 			<TextField onChange={this.handleInputChange} name="organisation" type='text'
 			value={this.state.organisation} floatingLabelText="Organisation"/>
+			</div>
+			<div className="LoggingRow">
+			<TextField onChange={this.handleInputChange} name="login" type='text'
+			value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
 			</div>
 			<div className="LoggingRow">
 			<TextField onChange={this.handleInputChange} name="password" 
 			value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
 			</div>
 			<div className="LoggingRow">
-			{this.state.errorMessage?
-				(<p>{this.state.errorMessage}</p>)
-				:null}
-				</div>
-				<div className="LoggingRow logButtonRow">
+			{this.state.errorMessage?(<p>{this.state.errorMessage}</p>):null}
+			{/*make better login errors messages*/}
+			</div>
+			<div className="LoggingRow logButtonRow">
 				<RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
-				</div>
-				{ this.state.waitingOnServer?
-					(<div className="LoggingRow">
-						<CircularProgress />
-						</div>)
-					: null}
-					</div>
-					</form>
-					</div>
+			</div>
+			{ this.state.waitingOnServer?
+			(<div className="LoggingRow">
+				<CircularProgress />
+			</div>)
+			: null}
+			</div>
+			</form>
+			</div>
 					);
 	}
 } 

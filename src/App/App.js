@@ -9,10 +9,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 /*
 In this "global" component we took the decision to make log validation with 
-the state boolean isLogged.Each component will , on lifeHook method "componentWillMount",
-make a verification of this state. This is probably not the best way to handle
-user authentification but without knowledge of the back-end it's the only one we know.
-Caveat is that on reload , authentifaction will be required again.
+the state boolean isLogged. Each component will, on lifeHook method "componentWillMount",
+evaluate this isLogged and redirect to login page is false.
 */
 
 const intesensTheme = getMuiTheme({
@@ -45,20 +43,26 @@ class App extends React.Component {
   }
   
   componentWillMount(){
+    const currentDevice = window.sessionStorage.getItem("currentDevice");
+    if(currentDevice){
+      this.setState({currentDevice: JSON.parse(currentDevice)});
+    }
     /*simple cookie value finder to read our fake auth token.
       to replace by proper authentification system */
     function getCookieValue(a) {
       var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
       return b ? b.pop() : '';
     }
+
     /*if the cookie exist and has the fake value*/
     if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
       this.setState({isLogged: true});
     }
-
-    const currentDevice = window.sessionStorage.getItem("currentDevice");
-    if(currentDevice){
-      this.setState({currentDevice: JSON.parse(currentDevice)});
+    if(getCookieValue("login")){
+      this.setState({userLogin:getCookieValue("login")}); 
+    }
+    if(getCookieValue("organisation")){
+        this.setState({userOrganisation:getCookieValue("organisation")});
     }
   }
   /**
@@ -79,6 +83,7 @@ class App extends React.Component {
     window.sessionStorage.clear();
     hashHistory.push('/');
   }
+
   newInstall(){
     const changeRoute = hashHistory.push('/install_device');
     window.sessionStorage.clear();
