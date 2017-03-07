@@ -55,14 +55,19 @@ class App extends React.Component {
     if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
       this.setState({isLogged: true});
     }
+
+    const currentDevice = window.sessionStorage.getItem("currentDevice");
+    if(currentDevice){
+      this.setState({currentDevice: JSON.parse(currentDevice)});
+    }
   }
   /**
    * a setter function bound to the context of App.
    * we pass this function to the  children to allow them to setState of App.
    * @param {ex:{userOrganisation:[string], userLogin:[string], isLogged:[boolean]}}
    */
-   setStateApp(userObject){
-    this.setState(userObject);
+   setStateApp(userObject, callback){
+    this.setState(userObject,callback);
   }
   
   /**
@@ -71,10 +76,12 @@ class App extends React.Component {
   logout(){
     this.setState({isLogged: false, userLogin: '', userOrganisation: '', currentDevice:{}});
     document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.sessionStorage.clear();
     hashHistory.push('/');
   }
   newInstall(){
     const changeRoute = hashHistory.push('/install_device');
+    window.sessionStorage.clear();
     this.setState({currentDevice:{}}, changeRoute);
   }
   

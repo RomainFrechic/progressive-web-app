@@ -14,7 +14,7 @@ export default class NewDeviceForm extends React.Component{
 		super(props);
 		this.state={
 			idError:false,
-			idErrorText:"Le device id n'est pas valide.\nIl doit etre un nombre hexadecimal de 4 de longeur.",
+			idErrorText:"L’adresse est au format hexadécimal (ex : 012345ABCDEF)",
 			localError: false,
 			localErrorText: 'Vous devez entrez une localisation',
 			waitingOnGeolocation: false,
@@ -33,6 +33,7 @@ export default class NewDeviceForm extends React.Component{
     	this.validateId = this.validateId.bind(this);
     	this.validateLocation = this.validateLocation.bind(this);
 	}
+
 	componentWillMount(){
 		/*before rendering we check the logStatus and we redirect to homepage if false*/
 		if(this.props.AppState.isLogged === false){hashHistory.push('/');}
@@ -46,22 +47,22 @@ export default class NewDeviceForm extends React.Component{
         	timeOfInstall:currentDevice.timeOfInstall,
         	comment:currentDevice.comment,
         	usedGeolocalisation:currentDevice.usedGeolocalisation
-         });
-        
+        });
+
 		//Library to format Date and hour in locale time
 		if(!this.state.timeOfInstall){
-		moment.locale('fr');
-		this.setState({timeOfInstall: moment().format('LLL','LT')});
+			moment.locale('fr');
+			this.setState({timeOfInstall: moment().format('LLL','LT')});
 		}
 	};
-	
-	
+
 	/*on blur, we test id field with this regex.
 	(like in wireframes we ask for a hexa number of 4 length)*/
 	testIdField(event){
 		const value = event.target.value;
-		const isHexa = new RegExp('^([A-Fa-f0-9]{2}){4}$');
-		if(isHexa.test(value)===false){ 
+		/*change hexaId required length by changing this part: '^([A-Fa-f0-9]{1}){minValue,maxvalue}$', leave a value empty for not setting a limit*/
+		const isHexa = new RegExp('^([A-Fa-f0-9]{1}){4,}$');
+		if(isHexa.test(value)===false){
 			this.setState({idError: true});
 		}else{
 			this.setState({idError: false});
@@ -87,40 +88,33 @@ export default class NewDeviceForm extends React.Component{
 	}
 
 	handleValidation(event){
+		const LONGUEUR_MIN_ID = 4;
+		const LONGEUR_MIN_LOCAL = 1;
 		event.preventDefault();
-		const validateIdInput = ()=>{
-			if(!this.state.id){
-				console.log('vide id');
-				this.setState({idError: true}, validateLocalisationInput);
-			}else{
-				validateLocalisationInput();
-			}
+		/*setState method is asynchronous, so we need the variable error to be set synchronously*/
+		let error = false;
+		if(this.state.id.length < LONGUEUR_MIN_ID){
+			error = true;
+			this.setState({idError: true});
 		}
-		const validateLocalisationInput = ()=>{
-			if(!this.state.postalAdress){
-				console.log('post empty');
-				this.setState({localError: true}, validate);
-			}else{
-				validate();
-			}
+		if(this.state.postalAdress < LONGEUR_MIN_LOCAL){
+			error = true;
+			this.setState({localError: true});
 		}
-		const validate = ()=>{
-			if(this.state.idError === false && this.state.localError === false && this.state.id && this.state.postalAdress){
+		if(error === false && !this.state.localError && !this.state.idError && this.state.id && this.state.postalAdress){
+			this.setState({waitingOnGeolocation:false}, ()=>{
+				window.sessionStorage.setItem("currentDevice", JSON.stringify(this.state));
+				this.props.setStateApp({currentDevice: this.state},redirect);
 				const redirect = hashHistory.push('/install_device/confirmation');
-				this.props.setStateApp({currentDevice: this.state}, redirect);
-				
-			}else{
-				/*error animation*/
-				console.log('anime error')
-			}	
-		}
-
-		validateIdInput();
+				}
+			);
+		}else{
+			/*error animation*/
+			console.log('anime error')
+		}	
 	}
 
-
 	handleLocation(){
-
 		/* 
 		timeout at 15s (may be too long)
 		enabling highAccuracy may not be required :
@@ -174,16 +168,16 @@ export default class NewDeviceForm extends React.Component{
   			console.log(error);
   			if(error.code === 1){
 				window.alert(`Erreur. Veuillez activer la géolocalisation et réessayer.
-				Error : ${error.code} ${error.message}`);
+				Code: ${error.code}, ${error.message}`);
   			}else if(error.code === 3){
 				window.alert(`Erreur. Le délai d'attente maximum a été dépassé.
-				Error : ${error.code} ${error.message}`);
+				Code: ${error.code}, ${error.message}`);
   			}else if(error.code === 2){
 				window.alert(`Erreur. Le serveur n'as pas été capable de vous localiser.
-				Error : ${error.code} ${error.message}`);
+				Code: ${error.code}, ${error.message}`);
   			}else{
 				window.alert(`Erreur. Erreur inconnue.
-				Error : ${error.code} ${error.message}`);
+				Code: ${error.code}, ${error.message}`);
   			}
 		};
 
@@ -212,7 +206,7 @@ export default class NewDeviceForm extends React.Component{
 			</div>
 			<div className="NewDeviceRow">
 				 <TextField name="id" type='text' value={this.state.id} onBlur={this.testIdField} fullWidth 
-				 floatingLabelText="Device id" required onChange={idError?this.validateId:this.handleInputChange}
+				 floatingLabelText="Device id" required onChange={this.validateId}
 				 errorText={idError? idErrorText:null}/>
 			</div>
 			<div className="NewDeviceRow localisationRow">

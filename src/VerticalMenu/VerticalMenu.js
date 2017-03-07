@@ -15,8 +15,9 @@ const VerticalMenu = (props)=> (
 		    >
 
 				<MenuItem onTouchTap={props.newInstall} primaryText="Faire une nouvelle installation" />
-				<MenuItem primaryText="Se rendre sur IDIAG web" />
-				<MenuItem primaryText="Options" />
+				{/*here you can add items to the menu. ie:*/}
+				{/*<MenuItem primaryText="Se rendre sur IDIAG web" />
+				<MenuItem primaryText="Options" />*/}
 				<MenuItem primaryText="Aide" />
 				<MenuItem onTouchTap={props.logout} primaryText="Se déconnecter" />
 		    </IconMenu>

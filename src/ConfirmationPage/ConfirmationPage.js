@@ -10,7 +10,7 @@ export default class  ConfirmationPage extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			id:''
+			waitingOnServer: false,
 		};
 		this.handleValidation = this.handleValidation.bind(this);
 	}
@@ -22,7 +22,16 @@ export default class  ConfirmationPage extends React.Component{
 
 	handleValidation(event){
 		event.preventDefault();
-		hashHistory.push('/install_device/success');
+		this.setState({waitingOnServer:true});
+		//hashHistory.push('/install_device/success');
+		const {postalAdress,latitude,longitude,id,timeOfInstall,comment,usedGeolocalisation} = this.props.AppState.currentDevice;
+		const {userLogin, userOrganisation} = this.props.AppState;
+		console.log(id,userLogin);
+
+	/*
+	
+	ici send request
+	 */
 	}
 
 	render(){
@@ -44,11 +53,6 @@ export default class  ConfirmationPage extends React.Component{
 			<div className="ConfirmationRow">
 			<span><b>Localisation :</b> {this.props.AppState.currentDevice.postalAdress}.</span></div>
 
-			{/*<div className="LongLatRow">
-			<span><b>Long :</b> {this.props.AppState.currentDevice.latitude}</span>
-			<span> <b>Lat :</b> {this.props.AppState.currentDevice.longitude}</span></div>*/}
-
-
 			<TextField
 			className="ConfirmationTextField"
 			disabled={true}
@@ -62,7 +66,7 @@ export default class  ConfirmationPage extends React.Component{
 			<p> <WarningIcon className="iconWarning" style={{color: 'orange'}} />
 			Les renseignements fournis sont modifiables 
 			uniquement en effectuant la procédure d'installation
-			 à nouveaux</p>
+			 à nouveau</p>
 			 
 			</div>
 			<div className="ConfirmationPage confirmButtonRow">
