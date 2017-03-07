@@ -88,24 +88,39 @@ export default class NewDeviceForm extends React.Component{
 
 	handleValidation(event){
 		event.preventDefault();
-		if(!this.state.postalAdress){
-			console.log('post empty');
-			this.setState({localError: true});
-
+		const validateIdInput = ()=>{
+			if(!this.state.id){
+				console.log('vide id');
+				this.setState({idError: true}, validateLocalisationInput);
+			}else{
+				validateLocalisationInput();
+			}
 		}
-		if(!this.state.id){
-			console.log('vide id');
-			this.setState({idError: true});
-			return;
+		const validateLocalisationInput = ()=>{
+			if(!this.state.postalAdress){
+				console.log('post empty');
+				this.setState({localError: true}, validate);
+			}else{
+				validate();
+			}
 		}
-		else if(this.state.idError === false && this.state.localError === false){
+		const validate = ()=>{
+			if(this.state.idError === false && this.state.localError === false && this.state.id && this.state.postalAdress){
 				const redirect = hashHistory.push('/install_device/confirmation');
 				this.props.setStateApp({currentDevice: this.state}, redirect);
-		}	
+				
+			}else{
+				/*error animation*/
+				console.log('anime error')
+			}	
+		}
+
+		validateIdInput();
 	}
 
 
 	handleLocation(){
+
 		/* 
 		timeout at 15s (may be too long)
 		enabling highAccuracy may not be required :
