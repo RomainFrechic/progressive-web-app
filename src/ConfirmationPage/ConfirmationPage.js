@@ -44,9 +44,9 @@ export default class  ConfirmationPage extends React.Component{
 			<div className="ConfirmationRow">
 			<span><b>Localisation :</b> {this.props.AppState.currentDevice.postalAdress}.</span></div>
 
-			<div className="LongLatRow">
+			{/*<div className="LongLatRow">
 			<span><b>Long :</b> {this.props.AppState.currentDevice.latitude}</span>
-			<span> <b>Lat :</b> {this.props.AppState.currentDevice.longitude}</span></div>
+			<span> <b>Lat :</b> {this.props.AppState.currentDevice.longitude}</span></div>*/}
 
 
 			<TextField
@@ -65,7 +65,7 @@ export default class  ConfirmationPage extends React.Component{
 			 à nouveaux</p>
 			 
 			</div>
-			<div className="ConfirmationPage buttonRow">
+			<div className="ConfirmationPage confirmButtonRow">
 			<RaisedButton onClick={this.handleValidation} 
 			label="Confirmer les renseignements" primary={true}/>
 			</div>

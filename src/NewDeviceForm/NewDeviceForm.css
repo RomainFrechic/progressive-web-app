@@ -24,10 +24,10 @@ form{
 	margin-right: auto;
 	margin-left: auto;
 }
-.buttonRow{
+.newButtonRow{
 	margin-top: 3vh;
-	margin-bottom: 3vh;
-
+	display: flex;
+	justify-content: center;
 }
 
 h3{

@@ -81,7 +81,7 @@ export default class LoggingForm extends React.Component{
 				(<p>{this.state.errorMessage}</p>)
 				:null}
 				</div>
-				<div className="LoggingRow buttonRow">
+				<div className="LoggingRow logButtonRow">
 				<RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
 				</div>
 				{ this.state.waitingOnServer?

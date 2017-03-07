@@ -74,7 +74,7 @@ class App extends React.Component {
     hashHistory.push('/');
   }
   newInstall(){
-    const changeRoute = ()=> hashHistory.push('/install_device');
+    const changeRoute = hashHistory.push('/install_device');
     this.setState({currentDevice:{}}, changeRoute);
   }
   

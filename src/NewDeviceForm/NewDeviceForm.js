@@ -47,14 +47,13 @@ export default class NewDeviceForm extends React.Component{
         	comment:currentDevice.comment,
         	usedGeolocalisation:currentDevice.usedGeolocalisation
          });
-         
         
 		//Library to format Date and hour in locale time
 		if(!this.state.timeOfInstall){
 		moment.locale('fr');
 		this.setState({timeOfInstall: moment().format('LLL','LT')});
-	}
-      };
+		}
+	};
 	
 	
 	/*on blur, we test id field with this regex.
@@ -92,14 +91,14 @@ export default class NewDeviceForm extends React.Component{
 		if(!this.state.postalAdress){
 			console.log('post empty');
 			this.setState({localError: true});
-			return;
+
 		}
 		if(!this.state.id){
 			console.log('vide id');
 			this.setState({idError: true});
 			return;
 		}
-		if(this.state.idError === false && this.state.localError === false){
+		else if(this.state.idError === false && this.state.localError === false){
 				const redirect = hashHistory.push('/install_device/confirmation');
 				this.props.setStateApp({currentDevice: this.state}, redirect);
 		}	
@@ -108,11 +107,12 @@ export default class NewDeviceForm extends React.Component{
 
 	handleLocation(){
 		/* 
+		timeout at 15s (may be too long)
 		enabling highAccuracy may not be required :
 		https://developers.google.com/web/fundamentals/native-hardware/user-location/
 		 */
 		const geoLocationOptions = {
-			timeout: 10 * 1000,
+			timeout: 15 * 1000,
 			maximumAge: 2 * 60 * 1000,
 			enableHighAccuracy: true
 		}
@@ -156,7 +156,20 @@ export default class NewDeviceForm extends React.Component{
 			3: timed out
 			*/
   			this.setState({waitingOnGeolocation: false});
-			window.alert('Geolocation failed, error code: ' + error.code);
+  			console.log(error);
+  			if(error.code === 1){
+				window.alert(`Erreur. Veuillez activer la géolocalisation et réessayer.
+				Error : ${error.code} ${error.message}`);
+  			}else if(error.code === 3){
+				window.alert(`Erreur. Le délai d'attente maximum a été dépassé.
+				Error : ${error.code} ${error.message}`);
+  			}else if(error.code === 2){
+				window.alert(`Erreur. Le serveur n'as pas été capable de vous localiser.
+				Error : ${error.code} ${error.message}`);
+  			}else{
+				window.alert(`Erreur. Erreur inconnue.
+				Error : ${error.code} ${error.message}`);
+  			}
 		};
 
   		navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError, geoLocationOptions);
@@ -204,7 +217,7 @@ export default class NewDeviceForm extends React.Component{
 				 style={{textAlign: 'left'}} fullWidth floatingLabelText="Commentaire"/>
 			</div>
 			
-			<div className="NewDeviceRow buttonRow">
+			<div className="NewDeviceRow newButtonRow">
 				  <RaisedButton onClick={this.handleValidation} label="Valider l'installation" primary={true}/>
 			</div>
 		</div>		

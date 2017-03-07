@@ -44,7 +44,7 @@ export default class SuccessPage extends React.Component{
 				<span>L'installation du device <b>"{this.props.AppState.currentDevice.id}" </b> 
 				s'est bien déroulée</span></div>
 
-				<div className="SuccessPage buttonRow">
+				<div className="SuccessPage successButtonRow">
 				<RaisedButton onClick={this.handleValidation} 
 				label="Faire une nouvelle installation" primary={true}/>
 				</div>
