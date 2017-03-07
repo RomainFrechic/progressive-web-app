@@ -33,6 +33,7 @@ export default class NewDeviceForm extends React.Component{
     	this.validateId = this.validateId.bind(this);
     	this.validateLocation = this.validateLocation.bind(this);
 	}
+	
 	componentWillMount(){
 		/*before rendering we check the logStatus and we redirect to homepage if false*/
 		if(this.props.AppState.isLogged === false){hashHistory.push('/');}
