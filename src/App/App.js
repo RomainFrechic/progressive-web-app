@@ -51,10 +51,21 @@ class App extends React.Component {
       var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
       return b ? b.pop() : '';
     }
+
     /*if the cookie exist and has the fake value*/
     if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
       this.setState({isLogged: true});
     }
+
+    if(getCookieValue("login")){
+      this.setState({userLogin:getCookieValue("login")});
+      
+    }
+    
+    if(getCookieValue("organisation")){
+        this.setState({userOrganisation:getCookieValue("organisation")});
+    }
+
   }
   /**
    * a setter function bound to the context of App.

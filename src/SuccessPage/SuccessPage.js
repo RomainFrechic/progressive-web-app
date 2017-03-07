@@ -10,6 +10,7 @@ export default class SuccessPage extends React.Component{
 		super(props);
 		this.state={
 			id:''
+
 		};
 		this.handleValidation = this.handleValidation.bind(this);
 	}
@@ -41,7 +42,7 @@ export default class SuccessPage extends React.Component{
 				<div className="SuccessPage">
 				<form>
 				<div className="SuccessHeader">
-				<span>L'installation du device <b>"{this.props.AppState.currentDevice.id}" </b> 
+				<span>L'installation de l'idiag <b>"{this.props.AppState.currentDevice.id}" </b> 
 				s'est bien déroulée</span></div>
 
 				<div className="SuccessPage successButtonRow">

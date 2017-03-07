@@ -48,7 +48,11 @@ export default class LoggingForm extends React.Component{
 				const authToken = response.data.token;
 				document.cookie = `authToken=${authToken};path="/";`
 				me.props.setStateApp({userOrganisation:organisation,userLogin:login,isLogged:true});
+				document.cookie = `login=${login};path="/";`
+				document.cookie = `organisation=${organisation};path="/";`
 				hashHistory.push('/install_device');
+				console.log(document.cookie);
+				
 			}
 		})
 		.catch(function(error){
@@ -65,12 +69,12 @@ export default class LoggingForm extends React.Component{
 			<form>
 			<div className="LoggingForm">
 			<div className="LoggingRow">
-			<TextField onChange={this.handleInputChange} name="login" type='text'
-			value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
-			</div>
-			<div className="LoggingRow">
 			<TextField onChange={this.handleInputChange} name="organisation" type='text'
 			value={this.state.organisation} floatingLabelText="Organisation"/>
+			</div>
+			<div className="LoggingRow">
+			<TextField onChange={this.handleInputChange} name="login" type='text'
+			value={this.state.login} floatingLabelText="Votre nom ou identifiant"/>
 			</div>
 			<div className="LoggingRow">
 			<TextField onChange={this.handleInputChange} name="password" 
