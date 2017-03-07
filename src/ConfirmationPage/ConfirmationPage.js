@@ -67,7 +67,6 @@ export default class  ConfirmationPage extends React.Component{
 			<TextField
 			className="ConfirmationTextField"
 			disabled={true}
-			hintText="Disabled Hint Text"
 			defaultValue={this.props.AppState.currentDevice.comment}
 			multiLine rows={2} rowsMax={2} 
 			style={{textAlign: 'left'}} fullWidth

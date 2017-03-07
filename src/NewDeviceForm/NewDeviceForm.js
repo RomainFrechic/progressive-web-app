@@ -29,7 +29,7 @@ export default class NewDeviceForm extends React.Component{
     	this.handleLocation = this.handleLocation.bind(this);
     	this.handleInputChange = this.handleInputChange.bind(this);
     	this.handleValidation = this.handleValidation.bind(this);
-    	this.testIdField = this.testIdField.bind(this);
+    	this.idFieldIsValid = this.idFieldIsValid.bind(this);
     	this.validateId = this.validateId.bind(this);
     	this.validateLocation = this.validateLocation.bind(this);
 	}
@@ -56,16 +56,24 @@ export default class NewDeviceForm extends React.Component{
 		}
 	};
 
-	/*on blur, we test id field with this regex.
+	/* we test id field with a regex.
 	(like in wireframes we ask for a hexa number of 4 length)*/
-	testIdField(event){
-		const value = event.target.value;
+	idFieldIsValid(value){
+		console.log(value)
+		const LONGUEUR_MIN_ID = 4;
 		/*change hexaId required length by changing this part: '^([A-Fa-f0-9]{1}){minValue,maxvalue}$', leave a value empty for not setting a limit*/
 		const isHexa = new RegExp('^([A-Fa-f0-9]{1}){4,}$');
-		if(isHexa.test(value)===false){
-			this.setState({idError: true});
+		if(value.length >= LONGUEUR_MIN_ID){ 
+			if(isHexa.test(value)===false){
+				this.setState({idError: true});
+				return false;
+			}else{
+				this.setState({idError: false});
+				return true;
+			}
 		}else{
-			this.setState({idError: false});
+			this.setState({idError: true});
+			return false;
 		}
 	}
 	
@@ -79,7 +87,7 @@ export default class NewDeviceForm extends React.Component{
 	/*will be called when idError is set to true.
 		we test the field at each input for validation feedback*/
 	validateId(event, nextValue){
-		this.testIdField(event);
+		this.idFieldIsValid(nextValue);
 		this.handleInputChange(event,nextValue);
 	}
 	validateLocation(event, nextValue){
@@ -88,16 +96,15 @@ export default class NewDeviceForm extends React.Component{
 	}
 
 	handleValidation(event){
-		const LONGUEUR_MIN_ID = 4;
-		const LONGEUR_MIN_LOCAL = 1;
+		
+		const LONGEUR_MIN_LOCAL_INPUT = 1;
 		event.preventDefault();
 		/*setState method is asynchronous, so we need the variable error to be set synchronously*/
 		let error = false;
-		if(this.state.id.length < LONGUEUR_MIN_ID){
+		if(!this.idFieldIsValid(this.state.id)){
 			error = true;
-			this.setState({idError: true});
 		}
-		if(this.state.postalAdress < LONGEUR_MIN_LOCAL){
+		if(this.state.postalAdress < LONGEUR_MIN_LOCAL_INPUT){
 			error = true;
 			this.setState({localError: true});
 		}
@@ -205,8 +212,8 @@ export default class NewDeviceForm extends React.Component{
 				 <span><b>Date :</b> {this.state.timeOfInstall}</span> 
 			</div>
 			<div className="NewDeviceRow">
-				 <TextField name="id" type='text' value={this.state.id} onBlur={this.testIdField} fullWidth
-				 floatingLabelText="Adresse IDIAG" required onChange={this.validateId}
+				 <TextField name="id" type='text' value={this.state.id} onBlur={this.idFieldIsValid.bind(this,this.state.id)} fullWidth
+				 floatingLabelText="Adresse IDIAG" required onChange={idError?this.validateId:this.handleInputChange}
 				 errorText={idError? idErrorText:null}/>
 			</div>
 			<div className="NewDeviceRow localisationRow">
