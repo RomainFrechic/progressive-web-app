@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import AdressAutocomplete from '../AdressAutocomplete/AdressAutocomplete';
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress';
+import Snackbar from 'material-ui/Snackbar';
 
 export default class NewDeviceForm extends React.Component{
 	constructor(props){
@@ -59,7 +60,6 @@ export default class NewDeviceForm extends React.Component{
 	/* we test id field with a regex.
 	(like in wireframes we ask for a hexa number of 4 length)*/
 	idFieldIsValid(value){
-		console.log(value)
 		const LONGUEUR_MIN_ID = 4;
 		/*change hexaId required length by changing this part: '^([A-Fa-f0-9]{1}){minValue,maxvalue}$', leave a value empty for not setting a limit*/
 		const isHexa = new RegExp('^([A-Fa-f0-9]{1}){4,}$');
@@ -111,10 +111,10 @@ export default class NewDeviceForm extends React.Component{
 		if(error === false && !this.state.localError && !this.state.idError && this.state.id && this.state.postalAdress){
 			this.setState({waitingOnGeolocation:false}, ()=>{
 				window.sessionStorage.setItem("currentDevice", JSON.stringify(this.state));
-				this.props.setStateApp({currentDevice: this.state},redirect);
-				const redirect = hashHistory.push('/install_device/confirmation');
-				}
-			);
+				this.props.setStateApp({currentDevice: this.state},()=>{
+					hashHistory.push('/install_device/confirmation');
+				});
+			});
 		}else{
 			/*error animation*/
 			console.log('anime error')
@@ -198,10 +198,19 @@ export default class NewDeviceForm extends React.Component{
 		const localError = this.state.localError;
 		const localErrorText = this.state.localErrorText;
 		
-	return(
+	return(	
 	<form>
 		{this.props.children}
 	<div className="NewDeviceForm">
+			{this.props.AppState.errorInstallMessage?
+					(<div className="feedbackMessageError">
+						{this.props.AppState.errorInstallMessage}
+					</div>)
+					:null
+			}
+			<Snackbar onRequestClose={()=>this.props.setStateApp({successInstall: false})} autoHideDuration={4000} 
+			name="feedbackMessageError" open={this.props.AppState.successInstall}
+			 message={this.props.AppState.successInstallMessage} />
 			<div className="NewDeviceHeader NewDeviceRow">
 				<h4>Déclarer une nouvelle installation</h4>
 			</div>

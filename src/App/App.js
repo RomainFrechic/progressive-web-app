@@ -27,6 +27,10 @@ class App extends React.Component {
       isLogged: false,
       userLogin: '',
       userOrganisation: '',
+      successInstall: false,
+      successInstallMessage: '',
+      errorInstall: false,
+      errorInstallMessage: '',
       currentDevice: {
         postalAdress: '',
         latitude: '',
@@ -85,9 +89,9 @@ class App extends React.Component {
   }
 
   newInstall(){
-    const changeRoute = hashHistory.push('/install_device');
+    const newInstallRoute = hashHistory.push('/install_device');
     window.sessionStorage.clear();
-    this.setState({currentDevice:{}}, changeRoute);
+    this.setState({currentDevice:{}}, newInstallRoute);
   }
   
 
@@ -95,7 +99,7 @@ class App extends React.Component {
     /*a "hack" that is required to pass props to this.props.children*/
     const {children} = this.props;
     const clonedChildren = React.cloneElement(children,
-      {setStateApp: this.setStateApp, AppState:this.state});
+      {setStateApp: this.setStateApp, AppState:this.state, newInstall:this.newInstall});
 
     return (
       <MuiThemeProvider muiTheme={intesensTheme}>
