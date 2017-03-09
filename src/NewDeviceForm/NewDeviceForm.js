@@ -135,6 +135,30 @@ export default class NewDeviceForm extends React.Component{
 			maximumAge: 2 * 60 * 1000,
 			enableHighAccuracy: true
 		}
+		const geoLocationError = (error)=> {
+			/* 
+			geolocation error handling goes here.
+			if error not passed, this mean we called this function from geocode api.
+
+			error.code can be:
+			0: unknown error
+			1: permission denied
+			2: position unavailable (error response from location provider)
+			3: timed out
+			*/
+  			this.setState({waitingOnGeolocation: false,errorGeolocalisation: error.code});
+  			if(!error){
+				this.setState({errorGeoMessage:`Erreur. Pas de connexion.`});
+  			}else if(error.code === 1){
+				this.setState({errorGeoMessage: `Erreur. Veuillez activer la géolocalisation puis rafraichir la page.`});
+  			}else if(error.code === 3){
+				this.setState({errorGeoMessage:`Erreur. Le délai d'attente maximum a été dépassé.`});
+  			}else if(error.code === 2){
+				this.setState({errorGeoMessage:`Erreur. Le serveur n'as pas été capable de vous localiser.`});
+  			}else if(error.code === 0){
+				this.setState({errorGeoMessage:`Erreur. Erreur inconnue.`});
+  			}
+		};
 		/*
 		succes callback
 		*/
@@ -162,34 +186,10 @@ export default class NewDeviceForm extends React.Component{
 	      			/*geocode error handling goes here*/
   					this.setState({waitingOnGeolocation: false});
   					/*if fail, probably due to no network, we use geolocation error handling*/
-  					geolocationError();
+  					geoLocationError();
 	      			window.alert('Geocoder failed due to: ' + status);
     			}
 			});
-		};
-		const geoLocationError = (error)=> {
-			/* 
-			geolocation error handling goes here.
-			if error not passed, this mean we called this function from geocode api.
-
-			error.code can be:
-			0: unknown error
-			1: permission denied
-			2: position unavailable (error response from location provider)
-			3: timed out
-			*/
-  			this.setState({waitingOnGeolocation: false,errorGeolocalisation: error.code});
-  			if(!error){
-				this.setState({errorGeoMessage:`Erreur. Pas de connexion.`});
-  			}else if(error.code === 1){
-				this.setState({errorGeoMessage: `Erreur. Veuillez activer la géolocalisation puis rafraichir la page.`});
-  			}else if(error.code === 3){
-				this.setState({errorGeoMessage:`Erreur. Le délai d'attente maximum a été dépassé.`});
-  			}else if(error.code === 2){
-				this.setState({errorGeoMessage:`Erreur. Le serveur n'as pas été capable de vous localiser.`});
-  			}else if(error.code === 0){
-				this.setState({errorGeoMessage:`Erreur. Erreur inconnue.`});
-  			}
 		};
 
   		navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError, geoLocationOptions);
