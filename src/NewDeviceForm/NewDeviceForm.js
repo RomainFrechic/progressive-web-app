@@ -136,7 +136,6 @@ export default class NewDeviceForm extends React.Component{
 			enableHighAccuracy: true
 		}
 		const geoLocationError = (error)=> {
-			console.log("error",error)
 			/* 
 			geolocation error handling goes here.
 			if error not passed, this mean we called this function from geocode api.
@@ -190,7 +189,6 @@ export default class NewDeviceForm extends React.Component{
   					this.setState({waitingOnGeolocation: false});
   					/*if fail, probably due to no network, we use geolocation error handling*/
   					geoLocationError();
-	      			window.alert('Geocoder failed due to: ' + status);
     			}
 			});
 		};
