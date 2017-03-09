@@ -24,6 +24,16 @@ export default class LoggingForm extends React.Component{
 		this.handleClick = this.handleClick.bind(this);
 	}
 
+	componentWillMount(){
+		/*before rendering we check the logStatus and we redirect to homepage if false*/
+		if(this.props.AppState.isLogged === true){
+		// 	hashHistory.push('/');
+		// }else{
+			hashHistory.push('/install_device');
+		}
+	}
+
+
 	handleInputChange(event, nextValue) {
 		const value = nextValue;
 		const name = event.target.name;		

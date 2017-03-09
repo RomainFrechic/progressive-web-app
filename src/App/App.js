@@ -14,11 +14,10 @@ evaluate this isLogged and redirect to login page is false.
 */
 
 const intesensTheme = getMuiTheme({
-  palette: {
-    primary1Color:green500,
-  }
+	palette: {
+		primary1Color:green500,
+	}
 });
-
 
 class App extends React.Component {
   constructor(props){
@@ -44,29 +43,28 @@ class App extends React.Component {
     this.setStateApp = this.setStateApp.bind(this);
     this.logout = this.logout.bind(this);
     this.newInstall = this.newInstall.bind(this);
-  }
-  
+  } 
   componentWillMount(){
     const currentDevice = window.sessionStorage.getItem("currentDevice");
     if(currentDevice){
       this.setState({currentDevice: JSON.parse(currentDevice)});
     }
-    /*simple cookie value finder to read our fake auth token.
-      to replace by proper authentification system */
-    function getCookieValue(a) {
-      var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
-      return b ? b.pop() : '';
-    }
 
-    /*if the cookie exist and has the fake value*/
-    if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
-      this.setState({isLogged: true});
-    }
-    if(getCookieValue("login")){
-      this.setState({userLogin:getCookieValue("login")}); 
-    }
-    if(getCookieValue("organisation")){
-        this.setState({userOrganisation:getCookieValue("organisation")});
+    /*simple cookie value finder to read our fake auth token.
+    to replace by proper authentification system */
+    function getCookieValue(a) {
+    	var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+    	return b ? b.pop() : '';
+    	/*if the cookie exist and has the fake value*/
+    	if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
+    		this.setState({isLogged: true});
+    	}
+    	if(getCookieValue("login")){
+    		this.setState({userLogin:getCookieValue("login")}); 
+    	}
+    	if(getCookieValue("organisation")){
+    		this.setState({userOrganisation:getCookieValue("organisation")});
+    	}
     }
   }
   /**
@@ -75,9 +73,9 @@ class App extends React.Component {
    * @param {ex:{userOrganisation:[string], userLogin:[string], isLogged:[boolean]}}
    */
    setStateApp(userObject, callback){
-    this.setState(userObject,callback);
-  }
-  
+   	this.setState(userObject,callback);
+   }
+
   /**
    * callback function passed to verticalMenu
    */
@@ -93,22 +91,20 @@ class App extends React.Component {
     window.sessionStorage.clear();
     this.setState({currentDevice:{}}, newInstallRoute);
   }
-  
-
   render() {
-    /*a "hack" that is required to pass props to this.props.children*/
-    const {children} = this.props;
-    const clonedChildren = React.cloneElement(children,
-      {setStateApp: this.setStateApp, AppState:this.state, newInstall:this.newInstall});
+  	/*a "hack" that is required to pass props to this.props.children*/
+  	const {children} = this.props;
+  	const clonedChildren = React.cloneElement(children,
+  		{setStateApp: this.setStateApp, AppState:this.state});
 
-    return (
-      <MuiThemeProvider muiTheme={intesensTheme}>
-        <div className="App">
-          <Header newInstall={this.newInstall} logout={this.logout} logStatus={this.state.isLogged}/>
-          {clonedChildren}
-        </div>
-      </MuiThemeProvider>
-      )
+  	return (
+  		<MuiThemeProvider muiTheme={intesensTheme}>
+  		<div className="App">
+  		<Header newInstall={this.newInstall} logout={this.logout} logStatus={this.state.isLogged}/>
+  		{clonedChildren}
+  		</div>
+  		</MuiThemeProvider>
+  	)
   }
 }
 
