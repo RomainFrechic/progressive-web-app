@@ -125,12 +125,13 @@ export default class NewDeviceForm extends React.Component{
 
 	handleLocation(){
 		/* 
-		timeout at 15s (may be too long)
+		timeout at 20s (may be too long,but in our test
+						we got some older phone not finding in 15sec)
 		enabling highAccuracy may not be required :
 		https://developers.google.com/web/fundamentals/native-hardware/user-location/
 		 */
 		const geoLocationOptions = {
-			timeout: 15 * 1000,
+			timeout: 20 * 1000,
 			maximumAge: 2 * 60 * 1000,
 			enableHighAccuracy: true
 		}
@@ -160,28 +161,33 @@ export default class NewDeviceForm extends React.Component{
       			}else {
 	      			/*geocode error handling goes here*/
   					this.setState({waitingOnGeolocation: false});
+  					/*if fail, probably due to no network, we use geolocation error handling*/
+  					geolocationError();
 	      			window.alert('Geocoder failed due to: ' + status);
     			}
 			});
 		};
 		const geoLocationError = (error)=> {
 			/* 
-			geolocation error handling goes here
+			geolocation error handling goes here.
+			if error not passed, this mean we called this function from geocode api.
+
 			error.code can be:
 			0: unknown error
 			1: permission denied
 			2: position unavailable (error response from location provider)
 			3: timed out
 			*/
-  			console.log(error);
   			this.setState({waitingOnGeolocation: false,errorGeolocalisation: error.code});
-  			if(error.code === 1){
+  			if(!error){
+				this.setState({errorGeoMessage:`Erreur. Pas de connexion.`});
+  			}else if(error.code === 1){
 				this.setState({errorGeoMessage: `Erreur. Veuillez activer la géolocalisation puis rafraichir la page.`});
   			}else if(error.code === 3){
 				this.setState({errorGeoMessage:`Erreur. Le délai d'attente maximum a été dépassé.`});
   			}else if(error.code === 2){
 				this.setState({errorGeoMessage:`Erreur. Le serveur n'as pas été capable de vous localiser.`});
-  			}else{
+  			}else if(error.code === 0){
 				this.setState({errorGeoMessage:`Erreur. Erreur inconnue.`});
   			}
 		};
@@ -255,4 +261,4 @@ export default class NewDeviceForm extends React.Component{
 	)
 
   }
-} 
+}
