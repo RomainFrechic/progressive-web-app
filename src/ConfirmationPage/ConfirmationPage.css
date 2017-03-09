@@ -1,11 +1,11 @@
-.ConfirmationPage{
+.ConfirmationForm{
 	margin-top: 2vh;
-	display: flex;
-	flex-direction: column;	
-	overflow: hidden;
 	max-width: 90vw;
 	margin-right: auto;
 	margin-left: auto;
+	display: flex;
+	flex-direction: column;	
+	overflow: hidden;
 }
 
 .ConfirmationHeader{
@@ -28,7 +28,8 @@
 }
 
 .ConfirmButtonRow{
-	text-align: center;
+	display: flex;
+	justify-content: center;
 	margin-top: 3vh;
 	margin-bottom: 3vh;
 }

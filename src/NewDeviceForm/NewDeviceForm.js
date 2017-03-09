@@ -197,17 +197,7 @@ export default class NewDeviceForm extends React.Component{
 		const localErrorText = this.state.localErrorText;
 		
 	return(	
-	<div>
 	<form className="NewDeviceForm">
-			{this.props.AppState.errorInstall?
-					(<div className="feedbackMessageError">
-						{this.props.AppState.errorInstallMessage}
-					</div>)
-					:null
-			}
-			<Snackbar onRequestClose={()=>this.props.setStateApp({successInstall: false})} 
-			name="feedbackMessageError" open={this.props.AppState.successInstall}
-			 message={this.props.AppState.successInstallMessage} />
 
 			{this.state.errorGeolocalisation !== false?
 				(<Paper className="popupError" zDepth={3}>
@@ -219,9 +209,14 @@ export default class NewDeviceForm extends React.Component{
 				</Paper>)
 				:null
 			}
-			<div className="NewDeviceHeader NewDeviceRow">
-				<h4>Déclarer une nouvelle installation</h4>
-			</div>
+			{this.props.AppState.errorInstall?
+					(<div className="feedbackMessageError">
+						{this.props.AppState.errorInstallMessage}
+					</div>)
+					:(<div className="NewDeviceHeader NewDeviceRow">
+							<h4>Déclarer une nouvelle installation</h4>
+					</div>)
+			}
 			<div className="NewDeviceRow installateurRow">
 				 <span><b>Installateur :</b> {this.props.AppState.userLogin}</span>
 			</div>
@@ -246,15 +241,17 @@ export default class NewDeviceForm extends React.Component{
 			</div>
 			<div className="NewDeviceRow">
 				 <TextField onChange={this.handleInputChange} name="comment" type='text'
-				 value={this.state.comment} multiLine rows={2} rowsMax={2} 
+				 value={this.state.comment} multiLine rows={3} rowsMax={3} 
 				 style={{textAlign: 'left'}} fullWidth floatingLabelText="Commentaire"/>
 			</div>
 			
 			<div className="NewDeviceRow newButtonRow">
 				  <RaisedButton onClick={this.handleValidation} label="Valider l'installation" primary={true}/>
 			</div>
+			<Snackbar id="snackBar" autoHideDuration={4000} onRequestClose={()=>this.props.setStateApp({successInstall: false})} 
+			name="successInstall" open={this.props.AppState.successInstall}
+			 message={this.props.AppState.successInstallMessage} />
 		</form>
-	</div>		
 	)
 
   }

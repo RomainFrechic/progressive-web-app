@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { hashHistory } from 'react-router';
+import {hashHistory} from 'react-router';
 import './ConfirmationPage.css';
+import Paper from 'material-ui/Paper';
 import CircularProgress from 'material-ui/CircularProgress';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
 import TextField from 'material-ui/TextField';
@@ -13,6 +14,8 @@ export default class  ConfirmationPage extends React.Component{
 		super(props);
 		this.state={
 			waitingOnServer: false,
+			errorNetwork: false,
+			errorNetworkMessage: ''
 		};
 		this.handleValidation = this.handleValidation.bind(this);
 	}
@@ -62,10 +65,15 @@ export default class  ConfirmationPage extends React.Component{
 			}},()=> hashHistory.push('/install_device'));
 			}
 		})
-		.catch((error)=>{
+		.catch((error)=>{	
 			this.setState({waitingOnServer:false},()=>{
+				/*if no network*/
+				if(!error.response){
+					const errorNetworkMessage = `Il semblerais que vous n'ayez pas de réseau. Réessayer lors ce que vous aurez du réseau.
+						${error.message}`;
+					this.setState({errorNetwork: true, errorNetworkMessage: errorNetworkMessage});
 				/* replace by wich ever error code you prefer*/
-				if(error.response.status === 403 || error.response.status === 400){
+				}else if(error.response.status === 403 || error.response.status === 400){
 					this.props.setStateApp({
       					errorInstall: true,
       					errorInstallMessage: `L'adresse IDIAG ${id} n'est pas déclaré sur la plateforme.`, 
@@ -87,8 +95,16 @@ export default class  ConfirmationPage extends React.Component{
 
 	render(){
 		return(
-			<div>
-			<form className="ConfirmationPage">
+			<form className="ConfirmationForm">
+			{this.state.errorNetwork !== false?
+				(<Paper className="popupError" zDepth={3}>
+					<h4>{this.state.errorNetworkMessage}</h4>
+					<div className="errorButtons">
+						<div><RaisedButton label="Fermer" onClick={()=>this.setState({errorNetwork:false})}/></div>
+					</div>
+				</Paper>)
+				:null
+			}
 			<div className="ConfirmationHeader">
 			<h4>Merci de vérifier les champs renseignés</h4></div>
 
@@ -133,14 +149,11 @@ export default class  ConfirmationPage extends React.Component{
 			<div className="ConfirmButtonRow">
 			<RaisedButton onClick={this.handleValidation} 
 			label="Confirmer les renseignements" primary={true}/>
-			</div>
 			{ this.state.waitingOnServer?
-			(<div className="ConfirmationRow">
-				<CircularProgress />
-			</div>)
+			(<CircularProgress />)
 			: null}
-			</form>
 			</div>
+			</form>
 			);
 	}
 } 
