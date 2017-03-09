@@ -27,8 +27,6 @@ export default class LoggingForm extends React.Component{
 	componentWillMount(){
 		/*before rendering we check the logStatus and we redirect to homepage if false*/
 		if(this.props.AppState.isLogged === true){
-		// 	hashHistory.push('/');
-		// }else{
 			hashHistory.push('/install_device');
 		}
 	}

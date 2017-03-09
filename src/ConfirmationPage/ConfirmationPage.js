@@ -28,7 +28,6 @@ export default class  ConfirmationPage extends React.Component{
 	handleValidation(event){
 		event.preventDefault();
 		this.setState({waitingOnServer:true});
-		hashHistory.push('/install_device/success');
 		const {postalAdress,latitude,longitude,id,timeOfInstall,comment,usedGeolocalisation} = this.props.AppState.currentDevice;
 		const {userLogin, userOrganisation} = this.props.AppState;
 		/*FOR DEVELLOPMENT ONLY, once the real api will be built, replace by real url.*/
