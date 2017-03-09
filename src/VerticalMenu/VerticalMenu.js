@@ -8,7 +8,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 const VerticalMenu = (props)=> (
 		<div>
 		    <IconMenu
-		    	className="InconMenu"
+		    	iconStyle={{width: '2.5rem', height:'2.5rem'}}
 				iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
 				anchorOrigin={{horizontal: 'left', vertical: 'top'}}
 				targetOrigin={{horizontal: 'left', vertical: 'top'}}

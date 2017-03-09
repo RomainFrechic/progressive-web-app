@@ -30,8 +30,7 @@ export default class  ConfirmationPage extends React.Component{
 		const {userLogin, userOrganisation} = this.props.AppState;
 		/*FOR DEVELLOPMENT ONLY, once the real api will be built, replace by real url.*/
 		/*For testing purpose, if we enter the id as "E403", we swap url for an api that send the requested error code*/
-		const URL = id !== "E403"? `https://reqres.in/api/install`: `https://reqres.in/api/register`
-		console.log(URL);
+		const URL = id !== "E403"? `https://reqres.in/api/install`: `https://reqres.in/api/register`;
 		axios.post(URL,
 			{
 				postalAdress,
@@ -45,7 +44,6 @@ export default class  ConfirmationPage extends React.Component{
 				userOrganisation
 		})
 		.then((response)=>{
-			console.log(response);
 			this.setState({waitingOnServer:false});
 			if(response.status === (201)){
 				/*redirect to NewDeviceForm page, keep only locatation state and clear session storage */
@@ -65,11 +63,9 @@ export default class  ConfirmationPage extends React.Component{
 			}
 		})
 		.catch((error)=>{
-			console.log("error",error.response.status);
 			this.setState({waitingOnServer:false},()=>{
 				/* replace by wich ever error code you prefer*/
 				if(error.response.status === 403 || error.response.status === 400){
-					console.log('in')
 					this.props.setStateApp({
       					errorInstall: true,
       					errorInstallMessage: `L'adresse IDIAG ${id} n'est pas déclaré sur la plateforme.`, 
@@ -91,8 +87,8 @@ export default class  ConfirmationPage extends React.Component{
 
 	render(){
 		return(
-			<form>
-			<div className="NewConfirmation">
+			<div>
+			<form className="ConfirmationPage">
 			<div className="ConfirmationHeader">
 			<h4>Merci de vérifier les champs renseignés</h4></div>
 
@@ -128,13 +124,13 @@ export default class  ConfirmationPage extends React.Component{
 			/></div>
 
             <div className="messageWarning">
-			<p><WarningIcon className="iconWarning" style={{color: 'orange'}} />
-			Les renseignements fournis sont modifiables 
-			uniquement en effectuant la procédure d'installation
-			 à nouveau</p>
+				<div><p><WarningIcon className="iconWarning" style={{color: 'orange'}} />
+				Les renseignements fournis sont modifiables 
+				uniquement en effectuant la procédure d'installation
+				 à nouveau</p></div>
 			</div>
 
-			<div className="ConfirmationPage confirmButtonRow">
+			<div className="ConfirmButtonRow">
 			<RaisedButton onClick={this.handleValidation} 
 			label="Confirmer les renseignements" primary={true}/>
 			</div>
@@ -143,8 +139,8 @@ export default class  ConfirmationPage extends React.Component{
 				<CircularProgress />
 			</div>)
 			: null}
-			</div>
 			</form>
+			</div>
 			);
 	}
 } 

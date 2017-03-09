@@ -11,3 +11,9 @@
 	margin-top: 3vh;
 	margin-bottom: 3vh;
 }
+.LoggingError{
+	margin-top: 1rem;
+	border: 1px solid;
+	color: #D8000C;
+	background-color: #FFBABA;
+}

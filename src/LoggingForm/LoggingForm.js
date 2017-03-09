@@ -46,17 +46,15 @@ export default class LoggingForm extends React.Component{
 			if(response.status === 200){
 				/*here goes authentification*/
 				const authToken = response.data.token;
-				document.cookie = `authToken=${authToken};path="/";`
 				me.props.setStateApp({userOrganisation:organisation,userLogin:login,isLogged:true});
+				document.cookie = `authToken=${authToken};path="/";`
 				document.cookie = `login=${login};path="/";`
 				document.cookie = `organisation=${organisation};path="/";`
 				hashHistory.push('/install_device');
-				console.log(document.cookie);
-				
 			}
 		})
 		.catch(function(error){
-			console.log(error);
+			console.log(error.message);
 
 			/*this is our basic error handling. You may want to replace this part*/
 			me.setState({waitingOnServer:false, errorMessage: errorHandling(error)});
@@ -80,10 +78,11 @@ export default class LoggingForm extends React.Component{
 			<TextField onChange={this.handleInputChange} name="password" 
 			value={this.state.password} type='password' floatingLabelText="Mot de passe"/>
 			</div>
-			<div className="LoggingRow">
-			{this.state.errorMessage?(<p>{this.state.errorMessage}</p>):null}
-			{/*make better login errors messages*/}
-			</div>
+			{this.state.errorMessage?
+				(<div className="LoggingRow LoggingError">
+				<p>{this.state.errorMessage}</p>
+				</div>)
+				:null}
 			<div className="LoggingRow logButtonRow">
 				<RaisedButton onClick={this.handleClick} label="Se connecter" primary={true}/>
 			</div>

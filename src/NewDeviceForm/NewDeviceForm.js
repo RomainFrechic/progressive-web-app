@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import Paper from 'material-ui/Paper';
 import { hashHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import './NewDeviceForm.css';
@@ -18,6 +19,7 @@ export default class NewDeviceForm extends React.Component{
 			idErrorText:"L’adresse est au format hexadécimal (ex : 012345ABCDEF)",
 			localError: false,
 			localErrorText: 'Vous devez entrez une localisation',
+			errorGeolocalisation:false,
 			waitingOnGeolocation: false,
 			usedGeolocalisation: false,
 		    latitude: '',
@@ -111,7 +113,7 @@ export default class NewDeviceForm extends React.Component{
 		if(error === false && !this.state.localError && !this.state.idError && this.state.id && this.state.postalAdress){
 			this.setState({waitingOnGeolocation:false}, ()=>{
 				window.sessionStorage.setItem("currentDevice", JSON.stringify(this.state));
-				this.props.setStateApp({currentDevice: this.state},()=>{
+				this.props.setStateApp({currentDevice: this.state, successInstall: false, errorInstall:false},()=>{
 					hashHistory.push('/install_device/confirmation');
 				});
 			});
@@ -171,20 +173,16 @@ export default class NewDeviceForm extends React.Component{
 			2: position unavailable (error response from location provider)
 			3: timed out
 			*/
-  			this.setState({waitingOnGeolocation: false});
   			console.log(error);
+  			this.setState({waitingOnGeolocation: false,errorGeolocalisation: error.code});
   			if(error.code === 1){
-				window.alert(`Erreur. Veuillez activer la géolocalisation et réessayer.
-				Code: ${error.code}, ${error.message}`);
+				this.setState({errorGeoMessage: `Erreur. Veuillez activer la géolocalisation puis rafraichir la page.`});
   			}else if(error.code === 3){
-				window.alert(`Erreur. Le délai d'attente maximum a été dépassé.
-				Code: ${error.code}, ${error.message}`);
+				this.setState({errorGeoMessage:`Erreur. Le délai d'attente maximum a été dépassé.`});
   			}else if(error.code === 2){
-				window.alert(`Erreur. Le serveur n'as pas été capable de vous localiser.
-				Code: ${error.code}, ${error.message}`);
+				this.setState({errorGeoMessage:`Erreur. Le serveur n'as pas été capable de vous localiser.`});
   			}else{
-				window.alert(`Erreur. Erreur inconnue.
-				Code: ${error.code}, ${error.message}`);
+				this.setState({errorGeoMessage:`Erreur. Erreur inconnue.`});
   			}
 		};
 
@@ -199,18 +197,28 @@ export default class NewDeviceForm extends React.Component{
 		const localErrorText = this.state.localErrorText;
 		
 	return(	
-	<form>
-		{this.props.children}
-	<div className="NewDeviceForm">
-			{this.props.AppState.errorInstallMessage?
+	<div>
+	<form className="NewDeviceForm">
+			{this.props.AppState.errorInstall?
 					(<div className="feedbackMessageError">
 						{this.props.AppState.errorInstallMessage}
 					</div>)
 					:null
 			}
-			<Snackbar onRequestClose={()=>this.props.setStateApp({successInstall: false})} autoHideDuration={4000} 
+			<Snackbar onRequestClose={()=>this.props.setStateApp({successInstall: false})} 
 			name="feedbackMessageError" open={this.props.AppState.successInstall}
 			 message={this.props.AppState.successInstallMessage} />
+
+			{this.state.errorGeolocalisation !== false?
+				(<Paper className="popupError" zDepth={3}>
+					<h4>{this.state.errorGeoMessage}</h4>
+					<div className="errorButtons">
+						<div><RaisedButton label="Fermer" onClick={()=>this.setState({errorGeolocalisation:false})}/></div>
+						{this.state.errorGeolocalisation === 1?(<div><RaisedButton onClick={()=>window.location.reload(true)} label="Rafraichir"/></div>):null}
+					</div>
+				</Paper>)
+				:null
+			}
 			<div className="NewDeviceHeader NewDeviceRow">
 				<h4>Déclarer une nouvelle installation</h4>
 			</div>
@@ -245,8 +253,8 @@ export default class NewDeviceForm extends React.Component{
 			<div className="NewDeviceRow newButtonRow">
 				  <RaisedButton onClick={this.handleValidation} label="Valider l'installation" primary={true}/>
 			</div>
-		</div>		
-	</form>
+		</form>
+	</div>		
 	)
 
   }

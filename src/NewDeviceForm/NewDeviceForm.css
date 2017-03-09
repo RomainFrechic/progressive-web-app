@@ -1,7 +1,10 @@
 .NewDeviceForm {
-	margin-top: 3vh;
+	margin-top: 2vh;
 	display: flex;
 	flex-direction: column;
+	max-width: 90vw;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 .installateurRow{
@@ -15,15 +18,11 @@
 	margin-bottom: 2vh;
 }
 .localisationRow{
+	position: relative;
 	display: flex;
 	align-items: center;
 }
 
-form{
-	max-width: 90vw;
-	margin-right: auto;
-	margin-left: auto;
-}
 .newButtonRow{
 	margin-top: 3vh;
 	display: flex;
@@ -36,3 +35,25 @@ h3{
 	margin-left: auto;
 }
 
+.feedbackMessageError{
+	padding: 1rem;
+	border: 1px solid;
+	color: #D8000C;
+	background-color: #FFBABA;
+}
+.popupError{
+	right: 10vw;
+	left: 10vw;
+	text-align: center;
+	max-width: 80vw;
+    position: absolute;
+    padding: 0.7rem;
+}
+.popupError h4{
+	color: #D8000C;
+}
+.errorButtons{
+	margin-bottom: 2vh;
+	display: flex;
+	justify-content: space-around;
+}

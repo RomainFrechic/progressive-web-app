@@ -1,43 +1,35 @@
-.NewConfirmation{
-	margin-top: 3vh;
+.ConfirmationPage{
+	margin-top: 2vh;
 	display: flex;
-	flex-direction: column;
-	
-}
-
-.ConfirmationHeader{
-	text-align: center;
-}
-
-
-.ConfirmationRow{
-	margin-bottom: 3vh;
-	font-size: 1.1rem;
-}
-
-.ConfirmationPage {
-	margin-top: 5vh;
-	display: flex;
-	flex-direction: column;
-}
-.LongLatRow{
-   font-size: 0.8rem;
-}
-
-form{
+	flex-direction: column;	
 	overflow: hidden;
 	max-width: 90vw;
 	margin-right: auto;
 	margin-left: auto;
 }
 
+.ConfirmationHeader{
+	text-align: center;
+}
+
+.ConfirmationRow{
+	margin-bottom: 2vh;
+	font-size: 1.1rem;
+}
+
+.LongLatRow{
+   font-size: 0.8rem;
+}
+
 .messageWarning{
 	display: flex;
-
+	margin-top: -2vh;
+	text-align: center;
 }
-.confirmButtonRow{
+
+.ConfirmButtonRow{
+	text-align: center;
 	margin-top: 3vh;
 	margin-bottom: 3vh;
-
 }
 
