@@ -1,4 +1,4 @@
 A Progressive Web App using React and material-ui components.
 
-https://RomainFrechic.github.io/react-intesens-PWA/#/
+https://romainfrechic.github.io/progressive-web-app/#/
 https://mathiasduc.github.io/react-intesens-PWA/#/ 

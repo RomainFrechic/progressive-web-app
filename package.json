@@ -26,5 +26,5 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://RomainFrechic.github.io/react-intesens-PWA/"
+  "homepage": "https://romainfrechic.github.io/progressive-web-app/"
 }
