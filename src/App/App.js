@@ -3,8 +3,9 @@ import Header from '../Header/Header';
 import {green500} from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { hashHistory } from 'react-router';
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import DetectingOnline from '../DetectingOnline/DetectingOnline';
+
 /*Theme  is required for using material-ui library https://github.com/callemall/material-ui#usage */
 
 /*
@@ -24,29 +25,33 @@ class App extends React.Component {
 	constructor(props){
 		super(props);
 		this.state={
+
 			isLogged: false,
 			userLogin: '',
 			userOrganisation: '',
-			currentDevice: {
-				postalAdress: '',
-				latitude: '',
-				longitude: '',
-				id:'',
-				timeOfInstall: '',
-				comment:'',
-				usedGeolocalisation:false
-			}
-		}
-		this.setStateApp = this.setStateApp.bind(this);
-		this.logout = this.logout.bind(this);
-		this.newInstall = this.newInstall.bind(this);
-	}
+     currentDevice: {
+      postalAdress: '',
+      latitude: '',
+      longitude: '',
+      id:'',
+      timeOfInstall: '',
+      comment:'',
+      usedGeolocalisation:false
+    }
+  }
+  this.setStateApp = this.setStateApp.bind(this);
+  this.logout = this.logout.bind(this);
+  this.newInstall = this.newInstall.bind(this);
+  
+}
 
-	componentWillMount(){
-		const currentDevice = window.sessionStorage.getItem("currentDevice");
-		if(currentDevice){
-			this.setState({currentDevice: JSON.parse(currentDevice)});
-		}
+componentWillMount(){
+  const currentDevice = window.sessionStorage.getItem("currentDevice");
+  if(currentDevice){
+   this.setState({currentDevice: JSON.parse(currentDevice)});
+ }
+
+
     /*simple cookie value finder to read our fake auth token.
     to replace by proper authentification system */
     function getCookieValue(a) {
@@ -66,10 +71,9 @@ class App extends React.Component {
     	}
     }
 
-    
+ }
 
 
-}
   /**
    * a setter function bound to the context of App.
    * we pass this function to the  children to allow them to setState of App.
@@ -78,6 +82,8 @@ class App extends React.Component {
    setStateApp(userObject, callback){
    	this.setState(userObject,callback);
    }
+
+
 
   /**
    * callback function passed to verticalMenu
@@ -97,20 +103,25 @@ class App extends React.Component {
 
 
    render() {
+
    	/*a "hack" that is required to pass props to this.props.children*/
    	const {children} = this.props;
    	const clonedChildren = React.cloneElement(children,
    		{setStateApp: this.setStateApp, AppState:this.state});
 
+
    	return (
    		<MuiThemeProvider muiTheme={intesensTheme}>
-   		<div className="App">
-   		<Header newInstall={this.newInstall} logout={this.logout} logStatus={this.state.isLogged}/>
-   		{clonedChildren}
-   		</div>
-   		</MuiThemeProvider>
-   		)
+      
+      <div className="App">
+     
+     <DetectingOnline />
+      <Header newInstall={this.newInstall} logout={this.logout} logStatus={this.state.isLogged}/>
+      {clonedChildren}
+      </div>
+      </MuiThemeProvider>
+      )
    }
-}
+ }
 
-export default App;
+ export default App;
