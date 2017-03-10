@@ -1,43 +1,36 @@
-.NewConfirmation{
-	margin-top: 3vh;
+.ConfirmationForm{
+	margin-top: 2vh;
+	max-width: 90vw;
+	margin-right: auto;
+	margin-left: auto;
 	display: flex;
-	flex-direction: column;
-	
+	flex-direction: column;	
+	overflow: hidden;
 }
 
 .ConfirmationHeader{
 	text-align: center;
 }
 
-
 .ConfirmationRow{
-	margin-bottom: 3vh;
+	margin-bottom: 2vh;
 	font-size: 1.1rem;
 }
 
-.ConfirmationPage {
-	margin-top: 5vh;
-	display: flex;
-	flex-direction: column;
-}
 .LongLatRow{
    font-size: 0.8rem;
 }
 
-form{
-	overflow: hidden;
-	max-width: 90vw;
-	margin-right: auto;
-	margin-left: auto;
-}
-
 .messageWarning{
 	display: flex;
-
+	margin-top: -2vh;
+	text-align: center;
 }
-.confirmButtonRow{
+
+.ConfirmButtonRow{
+	display: flex;
+	justify-content: center;
 	margin-top: 3vh;
 	margin-bottom: 3vh;
-
 }
 

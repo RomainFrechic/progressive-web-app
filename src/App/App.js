@@ -20,59 +20,58 @@ const intesensTheme = getMuiTheme({
 	}
 });
 
-
 class App extends React.Component {
-	constructor(props){
-		super(props);
-		this.state={
 
-			isLogged: false,
-			userLogin: '',
-			userOrganisation: '',
-     currentDevice: {
-      postalAdress: '',
-      latitude: '',
-      longitude: '',
-      id:'',
-      timeOfInstall: '',
-      comment:'',
-      usedGeolocalisation:false
+  constructor(props){
+    super(props);
+    this.state={
+      isLogged: false,
+      userLogin: '',
+      userOrganisation: '',
+      successInstall: false,
+      successInstallMessage: '',
+      errorInstall: false,
+      errorInstallMessage: '',
+      currentDevice: {
+        postalAdress: '',
+        latitude: '',
+        longitude: '',
+        id:'',
+        timeOfInstall: '',
+        comment:'',
+        usedGeolocalisation:false
+      }
     }
-  }
-  this.setStateApp = this.setStateApp.bind(this);
-  this.logout = this.logout.bind(this);
-  this.newInstall = this.newInstall.bind(this);
-  
-}
+    this.setStateApp = this.setStateApp.bind(this);
+    this.logout = this.logout.bind(this);
+    this.newInstall = this.newInstall.bind(this);
+  } 
 
-componentWillMount(){
-  const currentDevice = window.sessionStorage.getItem("currentDevice");
-  if(currentDevice){
-   this.setState({currentDevice: JSON.parse(currentDevice)});
- }
 
+  componentWillMount(){
+    const currentDevice = window.sessionStorage.getItem("currentDevice");
+    if(currentDevice){
+      this.setState({currentDevice: JSON.parse(currentDevice)});
+    }
 
     /*simple cookie value finder to read our fake auth token.
     to replace by proper authentification system */
     function getCookieValue(a) {
     	var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
     	return b ? b.pop() : '';
-
-
-    	/*if the cookie exist and has the fake value*/
-    	if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
-    		this.setState({isLogged: true});
-    	}
-    	if(getCookieValue("login")){
-    		this.setState({userLogin:getCookieValue("login")}); 
-    	}
-    	if(getCookieValue("organisation")){
-    		this.setState({userOrganisation:getCookieValue("organisation")});
-    	}
     }
 
- }
-
+    /*if the cookie exist and has the fake value*/
+    if(getCookieValue("authToken") === "QpwL5tke4Pnpja7X"){
+      this.setState({isLogged: true});
+    }
+    if(getCookieValue("login")){
+      this.setState({userLogin:getCookieValue("login")}); 
+    }
+    if(getCookieValue("organisation")){
+      this.setState({userOrganisation:getCookieValue("organisation")});
+    }
+  }
 
   /**
    * a setter function bound to the context of App.
@@ -103,19 +102,14 @@ componentWillMount(){
 
 
    render() {
-
    	/*a "hack" that is required to pass props to this.props.children*/
    	const {children} = this.props;
    	const clonedChildren = React.cloneElement(children,
    		{setStateApp: this.setStateApp, AppState:this.state});
-
-
    	return (
    		<MuiThemeProvider muiTheme={intesensTheme}>
-      
       <div className="App">
-     
-     <DetectingOnline />
+      <DetectingOnline />
       <Header newInstall={this.newInstall} logout={this.logout} logStatus={this.state.isLogged}/>
       {clonedChildren}
       </div>

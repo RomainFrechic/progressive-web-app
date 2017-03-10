@@ -6,6 +6,7 @@
 
 .Header {
 	display: flex;
+	max-width: 99vw;
 }
 
 .Header img{

@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import Paper from 'material-ui/Paper';
 import { hashHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import './NewDeviceForm.css';
@@ -8,6 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import AdressAutocomplete from '../AdressAutocomplete/AdressAutocomplete';
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress';
+import Snackbar from 'material-ui/Snackbar';
 
 export default class NewDeviceForm extends React.Component{
 	constructor(props){
@@ -17,6 +19,7 @@ export default class NewDeviceForm extends React.Component{
 			idErrorText:"L’adresse est au format hexadécimal (ex : 012345ABCDEF)",
 			localError: false,
 			localErrorText: 'Vous devez entrez une localisation',
+			errorGeolocalisation:false,
 			waitingOnGeolocation: false,
 			usedGeolocalisation: false,
 		    latitude: '',
@@ -59,7 +62,6 @@ export default class NewDeviceForm extends React.Component{
 	/* we test id field with a regex.
 	(like in wireframes we ask for a hexa number of 4 length)*/
 	idFieldIsValid(value){
-		console.log(value)
 		const LONGUEUR_MIN_ID = 4;
 		/*change hexaId required length by changing this part: '^([A-Fa-f0-9]{1}){minValue,maxvalue}$', leave a value empty for not setting a limit*/
 		const isHexa = new RegExp('^([A-Fa-f0-9]{1}){4,}$');
@@ -111,10 +113,10 @@ export default class NewDeviceForm extends React.Component{
 		if(error === false && !this.state.localError && !this.state.idError && this.state.id && this.state.postalAdress){
 			this.setState({waitingOnGeolocation:false}, ()=>{
 				window.sessionStorage.setItem("currentDevice", JSON.stringify(this.state));
-				this.props.setStateApp({currentDevice: this.state},redirect);
-				const redirect = hashHistory.push('/install_device/confirmation');
-				}
-			);
+				this.props.setStateApp({currentDevice: this.state, successInstall: false, errorInstall:false},()=>{
+					hashHistory.push('/install_device/confirmation');
+				});
+			});
 		}else{
 			/*error animation*/
 			console.log('anime error')
@@ -123,15 +125,42 @@ export default class NewDeviceForm extends React.Component{
 
 	handleLocation(){
 		/* 
-		timeout at 15s (may be too long)
+		timeout at 20s (may be too long,but in our test
+						we got some older phone not finding in 15sec)
 		enabling highAccuracy may not be required :
 		https://developers.google.com/web/fundamentals/native-hardware/user-location/
 		 */
 		const geoLocationOptions = {
-			timeout: 15 * 1000,
+			timeout: 20 * 1000,
 			maximumAge: 2 * 60 * 1000,
 			enableHighAccuracy: true
 		}
+		const geoLocationError = (error)=> {
+			/* 
+			geolocation error handling goes here.
+			if error not passed, this mean we called this function from geocode api.
+
+			error.code can be:
+			0: unknown error
+			1: permission denied
+			2: position unavailable (error response from location provider)
+			3: timed out
+			*/
+  			if(!error){
+				this.setState({errorGeolocalisation: 4, errorGeoMessage:`Erreur. Pas de connexion.`});
+			}else{
+	  			this.setState({waitingOnGeolocation: false,errorGeolocalisation: error.code});
+	  			if(error.code === 1){
+					this.setState({errorGeoMessage: `Erreur. Veuillez activer la géolocalisation puis rafraichir la page.`});
+	  			}else if(error.code === 3){
+					this.setState({errorGeoMessage:`Erreur. Le délai d'attente maximum a été dépassé.`});
+	  			}else if(error.code === 2){
+					this.setState({errorGeoMessage:`Erreur. Le serveur n'as pas été capable de vous localiser.`});
+	  			}else if(error.code === 0){
+					this.setState({errorGeoMessage:`Erreur. Erreur inconnue.`});
+	  			}
+			}
+		};
 		/*
 		succes callback
 		*/
@@ -158,34 +187,10 @@ export default class NewDeviceForm extends React.Component{
       			}else {
 	      			/*geocode error handling goes here*/
   					this.setState({waitingOnGeolocation: false});
-	      			window.alert('Geocoder failed due to: ' + status);
+  					/*if fail, probably due to no network, we use geolocation error handling*/
+  					geoLocationError();
     			}
 			});
-		};
-		const geoLocationError = (error)=> {
-			/* 
-			geolocation error handling goes here
-			error.code can be:
-			0: unknown error
-			1: permission denied
-			2: position unavailable (error response from location provider)
-			3: timed out
-			*/
-  			this.setState({waitingOnGeolocation: false});
-  			console.log(error);
-  			if(error.code === 1){
-				window.alert(`Erreur. Veuillez activer la géolocalisation et réessayer.
-				Code: ${error.code}, ${error.message}`);
-  			}else if(error.code === 3){
-				window.alert(`Erreur. Le délai d'attente maximum a été dépassé.
-				Code: ${error.code}, ${error.message}`);
-  			}else if(error.code === 2){
-				window.alert(`Erreur. Le serveur n'as pas été capable de vous localiser.
-				Code: ${error.code}, ${error.message}`);
-  			}else{
-				window.alert(`Erreur. Erreur inconnue.
-				Code: ${error.code}, ${error.message}`);
-  			}
 		};
 
   		navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError, geoLocationOptions);
@@ -198,13 +203,27 @@ export default class NewDeviceForm extends React.Component{
 		const localError = this.state.localError;
 		const localErrorText = this.state.localErrorText;
 		
-	return(
-	<form>
-		{this.props.children}
-	<div className="NewDeviceForm">
-			<div className="NewDeviceHeader NewDeviceRow">
-				<h4>Déclarer une nouvelle installation</h4>
-			</div>
+	return(	
+	<form className="NewDeviceForm">
+
+			{this.state.errorGeolocalisation !== false?
+				(<Paper className="popupError" zDepth={3}>
+					<h4>{this.state.errorGeoMessage}</h4>
+					<div className="errorButtons">
+						<div><RaisedButton label="Fermer" onClick={()=>this.setState({errorGeolocalisation:false})}/></div>
+						{this.state.errorGeolocalisation === 1?(<div><RaisedButton onClick={()=>window.location.reload(true)} label="Rafraichir"/></div>):null}
+					</div>
+				</Paper>)
+				:null
+			}
+			{this.props.AppState.errorInstall?
+					(<div className="feedbackMessageError">
+						{this.props.AppState.errorInstallMessage}
+					</div>)
+					:(<div className="NewDeviceHeader NewDeviceRow">
+							<h4>Déclarer une nouvelle installation</h4>
+					</div>)
+			}
 			<div className="NewDeviceRow installateurRow">
 				 <span><b>Installateur :</b> {this.props.AppState.userLogin}</span>
 			</div>
@@ -229,16 +248,18 @@ export default class NewDeviceForm extends React.Component{
 			</div>
 			<div className="NewDeviceRow">
 				 <TextField onChange={this.handleInputChange} name="comment" type='text'
-				 value={this.state.comment} multiLine rows={2} rowsMax={2} 
+				 value={this.state.comment} multiLine rows={3} rowsMax={3} 
 				 style={{textAlign: 'left'}} fullWidth floatingLabelText="Commentaire"/>
 			</div>
 			
 			<div className="NewDeviceRow newButtonRow">
 				  <RaisedButton onClick={this.handleValidation} label="Valider l'installation" primary={true}/>
 			</div>
-		</div>		
-	</form>
+			<Snackbar id="snackBar" autoHideDuration={4000} onRequestClose={()=>this.props.setStateApp({successInstall: false})} 
+			name="successInstall" open={this.props.AppState.successInstall}
+			 message={this.props.AppState.successInstallMessage} />
+		</form>
 	)
 
   }
-} 
+}
