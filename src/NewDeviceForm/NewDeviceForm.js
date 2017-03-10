@@ -147,17 +147,17 @@ export default class NewDeviceForm extends React.Component{
 			3: timed out
 			*/
   			if(!error){
-				this.setState({errorGeolocalisation: 4, errorGeoMessage:`Erreur. Pas de connexion.`});
+				this.setState({errorGeolocalisation: 4, errorGeoMessage:`Erreur Pas de connexion`});
 			}else{
 	  			this.setState({waitingOnGeolocation: false,errorGeolocalisation: error.code});
 	  			if(error.code === 1){
-					this.setState({errorGeoMessage: `Erreur. Veuillez activer la géolocalisation puis rafraichir la page.`});
+					this.setState({errorGeoMessage: `Erreur Veuillez activer la géolocalisation puis rafraichir la page`});
 	  			}else if(error.code === 3){
-					this.setState({errorGeoMessage:`Erreur. Le délai d'attente maximum a été dépassé.`});
+					this.setState({errorGeoMessage:`Erreur Le délai d'attente maximum a été dépassé`});
 	  			}else if(error.code === 2){
-					this.setState({errorGeoMessage:`Erreur. Le serveur n'as pas été capable de vous localiser.`});
+					this.setState({errorGeoMessage:`Erreur Le serveur n'as pas été capable de vous localiser`});
 	  			}else if(error.code === 0){
-					this.setState({errorGeoMessage:`Erreur. Erreur inconnue.`});
+					this.setState({errorGeoMessage:`Erreur Erreur inconnue`});
 	  			}
 			}
 		};
@@ -258,7 +258,10 @@ export default class NewDeviceForm extends React.Component{
 			<Snackbar id="snackBar" autoHideDuration={4000} onRequestClose={()=>this.props.setStateApp({successInstall: false})} 
 			name="successInstall" open={this.props.AppState.successInstall}
 			 message={this.props.AppState.successInstallMessage} />
+		    
+		     
 		</form>
+
 	)
 
   }

@@ -1,5 +1,7 @@
 import React from 'react';
+import './DetectingOnline.css';
 import Snackbar from 'material-ui/Snackbar';
+
 
 export default class DetectingOnline extends React.Component{
 	constructor(props){
@@ -30,7 +32,7 @@ export default class DetectingOnline extends React.Component{
         />
         console.log("Vous n'êtes pas connecter");
       }
-    },20000);
+    },15000);
    }
 
      detectingOnline();
@@ -39,6 +41,7 @@ export default class DetectingOnline extends React.Component{
 	render() {
    	return (
    		 <Snackbar
+   		  id="snackBarOnline"
           open={this.state.open}
           message={this.state.message}
           autoHideDuration={4000}
