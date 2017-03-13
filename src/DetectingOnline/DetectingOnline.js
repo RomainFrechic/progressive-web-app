@@ -20,17 +20,18 @@ export default class DetectingOnline extends React.Component{
       const me =this;
      setInterval(()=>{
        if(navigator.onLine){
-        console.log("Vous êtes connecter");
+       	 me.setState({open:false});
+        console.log("Vous êtes connecté");
       }else{
        me.setState({open:true});	
-       me.setState({message:"Vous n'êtes pas connecter"});
+       me.setState({message:"Vous n'êtes pas connecté"});
        <Snackbar
           open={this.state.open}
           message={this.state.message}
           autoHideDuration={4000}
           
         />
-        console.log("Vous n'êtes pas connecter");
+        console.log("Vous n'êtes pas connecté");
       }
     },15000);
    }
