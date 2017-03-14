@@ -8,8 +8,7 @@ export default class DetectingOnline extends React.Component{
 		super(props);
 		this.state={
 			open: false,
-     		message:''
-			
+     		message:''		
 		};
 		
 	}
